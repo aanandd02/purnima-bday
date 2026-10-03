@@ -4,6 +4,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { birthdayConfig } from "@/lib/birthdayConfig";
 import { haptic } from "@/lib/utils";
+import { asset } from "@/lib/assetPath";
 
 interface IntroSceneProps {
   onBegin: () => void;
@@ -61,7 +62,7 @@ export function IntroScene({ onBegin }: IntroSceneProps) {
         onTouchEnd={endLongPress}
       >
         <Image
-          src={birthdayConfig.heroPhoto}
+          src={asset(birthdayConfig.heroPhoto)}
           alt="Purnima"
           fill
           priority

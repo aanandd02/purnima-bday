@@ -2,6 +2,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { birthdayConfig } from "@/lib/birthdayConfig";
+import { asset } from "@/lib/assetPath";
 
 interface VideoSceneProps {
   onContinue: () => void;
@@ -93,8 +94,8 @@ function VideoCard({
       >
         <video
           ref={videoRef}
-          src={video.src}
-          poster={hasPoster ? video.poster : undefined}
+          src={asset(video.src)}
+          poster={hasPoster ? asset(video.poster) : undefined}
           preload="metadata"
           playsInline
           muted

@@ -1,14 +1,17 @@
 import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
+const BASE_PATH = isProd ? "/purnima-bday" : "";
 
 const nextConfig: NextConfig = {
-  output: "export",           // Static HTML export for GitHub Pages
-  basePath: isProd ? "/purnima-bday" : "",
-  images: {
-    unoptimized: true,        // Required for static export
+  output: "export",
+  basePath: BASE_PATH,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: BASE_PATH,
   },
-  // Ensure framer-motion resolves correctly
+  images: {
+    unoptimized: true,
+  },
   transpilePackages: [],
 };
 

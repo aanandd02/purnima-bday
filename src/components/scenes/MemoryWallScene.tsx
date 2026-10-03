@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { birthdayConfig } from "@/lib/birthdayConfig";
+import { asset } from "@/lib/assetPath";
 import { MediaViewer } from "@/components/ui/MediaViewer";
 
 interface MemoryWallSceneProps {
@@ -42,7 +43,7 @@ function VideoThumbnailCard({
     >
       {!imgFailed && video.poster ? (
         <Image
-          src={video.poster}
+          src={asset(video.poster)}
           alt={video.caption}
           fill
           unoptimized
@@ -53,7 +54,7 @@ function VideoThumbnailCard({
         />
       ) : (
         <video
-          src={`${video.src}#t=0.5`}
+          src={`${asset(video.src)}#t=0.5`}
           preload="metadata"
           muted
           playsInline
@@ -91,13 +92,13 @@ export function MemoryWallScene({ onContinue }: MemoryWallSceneProps) {
 
   const allMedia = [
     ...birthdayConfig.memories.map((m) => ({
-      src: m.src,
+      src: asset(m.src),
       caption: m.caption,
       type: "image" as const,
     })),
     ...birthdayConfig.videos.map((v) => ({
-      src: v.src,
-      poster: v.poster,
+      src: asset(v.src),
+      poster: asset(v.poster),
       caption: v.caption,
       type: "video" as const,
     })),
@@ -194,7 +195,7 @@ export function MemoryWallScene({ onContinue }: MemoryWallSceneProps) {
               onPointerUp={(e) => handleItemTap(i, e)}
             >
               <Image
-                src={memory.src}
+                src={asset(memory.src)}
                 alt={memory.caption}
                 fill
                 draggable={false}

@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { birthdayConfig } from "@/lib/birthdayConfig";
+import { asset } from "@/lib/assetPath";
 import { MediaViewer } from "@/components/ui/MediaViewer";
 
 interface MemorySceneProps {
@@ -69,7 +70,7 @@ function MemoryCard({
           }}
         >
           <Image
-            src={memory.src}
+            src={asset(memory.src)}
             alt={memory.caption}
             fill
             draggable={false}
@@ -124,7 +125,7 @@ export function MemoryScene({ onContinue }: MemorySceneProps) {
   const [viewerIndex, setViewerIndex] = useState<number | null>(null);
 
   const mediaItems = birthdayConfig.memories.map((m) => ({
-    src: m.src,
+    src: asset(m.src),
     caption: m.caption,
     type: "image" as const,
   }));
