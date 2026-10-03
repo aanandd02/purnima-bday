@@ -1,26 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+
 @import "tailwindcss";
 
+/* ── Design tokens ──────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gold:               #D4AF37;
+  --gold-light:         #F3E5AB;
+  --gold-dim:           #A38346;
+  --cream:              #FDFBF7;
+  --cream-dim:          rgba(253,251,247,0.7);
+  --bg-deep:            #09090C;
+  --bg-warm:            #0E0E12;
+  --bg-card:            #14141A;
+  --black:              #09090C;
+  --charcoal:           #0E0E12;
+  --glass:              rgba(255,255,255,0.04);
+  --glass-border:       rgba(212,175,55,0.22);
+  --glass-border-subtle: rgba(255,255,255,0.08);
+  --serif:              'Cormorant Garamond', Georgia, serif;
+  --sans:               'Inter', system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:   cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
   }
 }
 
+html {
+  min-height: 100%;
+  background: var(--bg-deep);
+  color: var(--cream);
+  font-family: var(--sans);
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-deep);
+  color: var(--cream);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Media element scroll / drag protection */
+img, video {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Typography ─────────────────────────────────────────── */
+.font-serif    { font-family: var(--serif); }
+.font-sans     { font-family: var(--sans); }
+
+/* ── Clean overlay (no animated noise) ─────────────────── */
+.grain {
+  position: relative;
+}
+
+/* ── Mobile-first layout helpers ───────────────────────── */
+:root {
+  /* Scenes and phone-frame use this to fill exactly the right height.
+     On mobile = 100dvh (full viewport).
+     On desktop = 100dvh minus body top+bottom padding (48px). */
+  --vh-screen: 100dvh;
+}
+
+.phone-frame {
+  position: relative;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: var(--vh-screen);
+  min-height: -webkit-fill-available;
+  background: var(--bg-warm);
+  /* safe area padding so content never hides under notch/home bar */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ── Scene container ────────────────────────────────────── */
+.scene {
+  position: relative;
+  width: 100%;
+  min-height: var(--vh-screen);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-warm);
+}
+
+/* ── Glass card ─────────────────────────────────────────── */
+.glass-card {
+  background: rgba(20, 20, 26, 0.8);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.letter-card {
+  background: #14141A;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 240, 210, 0.15);
+  border-radius: 20px;
+}
+
+/* ── Vignette ───────────────────────────────────────────── */
+.vignette::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(9,9,12,0.85) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Gold text ──────────────────────────────────────────── */
+.text-gold   { color: var(--gold); }
+.text-cream  { color: var(--cream); }
+
+/* ── CTA Button ─────────────────────────────────────────── */
+.btn-cinematic {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 36px;
+  border-radius: 100px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s;
+  min-height: 50px;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-cinematic:active {
+  transform: scale(0.97);
+  background: rgba(201,169,110,0.08);
+  box-shadow: 0 0 30px rgba(201,169,110,0.25);
+}
+
+/* ── Countdown numbers ──────────────────────────────────── */
+.countdown-num {
+  font-family: var(--serif);
+  font-size: clamp(48px, 16vw, 80px);
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.countdown-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+
+/* ── Progress dot ───────────────────────────────────────── */
+.progress-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(245,240,232,0.2);
+  transition: all 0.4s;
+}
+
+.progress-dot.active {
+  background: var(--gold);
+  transform: scale(1.5);
+}
+
+/* ── Candle flame ───────────────────────────────────────── */
+@keyframes flicker {
+  0%, 100% { transform: scaleX(1) scaleY(1) rotate(0deg); opacity: 1; }
+  25%       { transform: scaleX(0.9) scaleY(1.05) rotate(-2deg); opacity: 0.95; }
+  50%       { transform: scaleX(1.05) scaleY(0.97) rotate(2deg); opacity: 1; }
+  75%       { transform: scaleX(0.95) scaleY(1.02) rotate(-1deg); opacity: 0.9; }
+}
+
+.flame-animate {
+  animation: flicker 1.5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* ── Scrollbar hidden ───────────────────────────────────── */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ── Safe area padding ──────────────────────────────────── */
+.safe-top    { padding-top: max(16px, env(safe-area-inset-top)); }
+.safe-bottom { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+
+/* ── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .flame-animate   { animation: none; }
+  .grain::after    { animation: none; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+/* ── Prose-like body text ───────────────────────────────── */
+.letter-body {
+  font-family: var(--serif);
+  font-size: clamp(17px, 4.5vw, 21px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.8;
+  color: var(--cream-dim);
+  white-space: pre-wrap;
+}
+
+/* ── Desktop centering ──────────────────────────────────── */
+@media (min-width: 768px) {
+  :root {
+    /* body has 24px top + 24px bottom padding on desktop = 48px total.
+       scenes must be exactly this much shorter so body = 100dvh (no scroll). */
+    --vh-screen: calc(100dvh - 48px);
+  }
+  body {
+    padding: 24px 0;
+    background: #08080A;
+  }
+  .phone-frame {
+    /* Subtract body top+bottom padding so frame fits exactly in viewport */
+    min-height: var(--vh-screen);
+    border-radius: 32px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.85);
+    background: var(--bg-warm);
+  }
 }

@@ -1,0 +1,21 @@
+{
+  "photos": {
+    "hero-01.jpg": "IMG-20260929-WA0010.jpg",
+    "memory-01.jpg": "IMG-20260606-WA0004.jpg",
+    "memory-02.jpg": "IMG-20260615-WA0011.jpg",
+    "memory-03.jpg": "WhatsApp Image 2026-09-27 at 22.29.57.jpeg",
+    "memory-04.jpg": "IMG-20260928-WA0025.jpg",
+    "memory-05.jpg": "IMG-20260929-WA0008.jpg",
+    "memory-06.jpg": "file_00000000a33882089fa2185136398644.png",
+    "memory-07.jpg": "file_00000000dc108211bc4ba8ed8f646e7b.png"
+  },
+  "videos": {
+    "video-01.mp4": "VID-20260619-WA0039.mp4",
+    "video-02.mp4": "VID-20260620-WA0000.mp4",
+    "video-03.mp4": "VID-20260622-WA0000.mp4",
+    "video-04.mp4": "VID-20260811-WA0007.mp4",
+    "video-05.mp4": "VID_20260826_002824_101.mp4",
+    "video-06.mp4": "VID-20260908-WA0043.mp4",
+    "video-07.mp4": "VID-20260922-WA0007.mp4"
+  }
+}
