@@ -73,10 +73,10 @@ function MemoryCard({
             src={asset(memory.src)}
             alt={memory.caption}
             fill
+            priority={index === 0}
             draggable={false}
             className="object-cover object-top pointer-events-none select-none transition-transform duration-700"
             sizes="(max-width: 430px) 100vw, 430px"
-            loading="lazy"
           />
           {/* Subtle gradient vignette */}
           <div

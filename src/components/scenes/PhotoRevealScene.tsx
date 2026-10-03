@@ -44,7 +44,7 @@ export function PhotoRevealScene({ onContinue }: PhotoRevealSceneProps) {
           fill
           priority
           className="object-cover object-center"
-          style={{ filter: "brightness(0.35) saturate(0.8)" }}
+          style={{ filter: "brightness(0.75) saturate(0.95)" }}
           sizes="100vw"
         />
         {/* Gradient */}
@@ -52,7 +52,7 @@ export function PhotoRevealScene({ onContinue }: PhotoRevealSceneProps) {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(7,7,10,0.6) 0%, transparent 30%, rgba(7,7,10,0.85) 100%)",
+              "linear-gradient(to bottom, rgba(7,7,10,0.3) 0%, transparent 40%, rgba(7,7,10,0.85) 100%)",
           }}
         />
       </motion.div>

@@ -42,12 +42,12 @@ export function CountdownScene({ onContinue }: CountdownSceneProps) {
         minHeight: "var(--vh-screen)",
       }}
     >
-      {/* Blurred hero photo background */}
+      {/* Hero photo background */}
       <motion.div
-        className="absolute inset-0 vignette pointer-events-none"
-        initial={{ opacity: 0, scale: 1.05 }}
+        className="absolute inset-0 pointer-events-none"
+        initial={{ opacity: 0, scale: 1.03 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       >
         <Image
           src={asset(birthdayConfig.heroPhoto)}
@@ -55,7 +55,7 @@ export function CountdownScene({ onContinue }: CountdownSceneProps) {
           fill
           priority
           className="object-cover object-top"
-          style={{ filter: "blur(3px) brightness(0.4) saturate(0.65)" }}
+          style={{ filter: "brightness(0.68) saturate(0.9) blur(1.5px)" }}
           sizes="100vw"
         />
         {/* Warm luxury overlay */}
@@ -63,7 +63,7 @@ export function CountdownScene({ onContinue }: CountdownSceneProps) {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(7,7,10,0.65) 0%, rgba(7,7,10,0.35) 50%, rgba(7,7,10,0.85) 100%)",
+              "linear-gradient(to bottom, rgba(7,7,10,0.5) 0%, rgba(7,7,10,0.3) 45%, rgba(7,7,10,0.8) 100%)",
           }}
         />
       </motion.div>

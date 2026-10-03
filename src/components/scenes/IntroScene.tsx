@@ -50,12 +50,12 @@ export function IntroScene({ onBegin }: IntroSceneProps) {
 
   return (
     <div className="scene relative" style={{ minHeight: "var(--vh-screen)" }}>
-      {/* Blurred hero photo */}
+      {/* Hero photo background */}
       <motion.div
-        className="absolute inset-0 vignette"
-        initial={{ opacity: 0, scale: 1.06 }}
+        className="absolute inset-0"
+        initial={{ opacity: 0, scale: 1.04 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 3.5, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         onMouseDown={startLongPress}
         onMouseUp={endLongPress}
         onTouchStart={startLongPress}
@@ -67,15 +67,15 @@ export function IntroScene({ onBegin }: IntroSceneProps) {
           fill
           priority
           className="object-cover object-top"
-          style={{ filter: "blur(2px) brightness(0.45) saturate(0.7)" }}
-          sizes="430px"
+          style={{ filter: "brightness(0.72) saturate(0.95)" }}
+          sizes="100vw"
         />
-        {/* warm gradient overlay */}
+        {/* Soft luxury cinematic gradient overlay so text is super readable but photo is vividly visible */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(7,7,10,0.5) 0%, rgba(7,7,10,0.2) 40%, rgba(7,7,10,0.7) 100%)",
+              "linear-gradient(to bottom, rgba(7,7,10,0.4) 0%, rgba(7,7,10,0.2) 35%, rgba(7,7,10,0.75) 100%)",
           }}
         />
       </motion.div>
