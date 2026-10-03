@@ -293,35 +293,35 @@ Sirf tum. Hamesha.`,
   reasons: [
     {
       title: "Teri muskaan",
-      message: "Jis din bhi tum muskurati ho, mere liye woh din ka sabse khoobsurat pal ban jaata hai.",
+      message: "Jab tum sach mein muskura deti ho na, bina kisi banaawat ke — lagta hai sab kuch theek ho gaya. Us muskaan mein ek alag sa sukoon hai.",
     },
     {
       title: "Teri energy",
-      message: "Jis kamre mein tum ho, woh kamra mehak uthta hai. Literally.",
+      message: "Tumhari presence hi aisi hai — jab tum saath hoti ho ya baat kar rahi hoti ho, toh sab kuch apne aap light aur sukoon bhara lagne lagta hai.",
     },
     {
       title: "Teri awaaz",
-      message: "Teri ek call aur sab better ho jaata hai. Tum jaanti ho na — sirf sunne se hi chain milti hai.",
+      message: "Din bhar ke shor ke baad bas thodi der tumhari awaaz sun lena... sach mein ek aisi chain milti hai jo aur kahin nahi hai.",
     },
     {
       title: "Tera dil",
-      message: "Tum itni asaani se pyaar karti ho — aur yahi cheez tujhe sabse alag banati hai.",
+      message: "Tum har kisi se asaani se attach nahi hoti, kisi se lagav hone mein waqt lagta hai — par jisse tum dil se judti ho, uske liye tumhara pyaar ekdum sacha, gehra aur real hota hai. Yahi baat tumhe sabse alag banati hai.",
     },
     {
       title: "Tera gussa bhi",
-      message: "Haan, woh bhi. Kyunki usme bhi tum hi dikhti ho — sachchi, honest, real.",
+      message: "Haan, woh thoda sa nakhra aur ruthna bhi. Kyunki usme bhi tumhara haq aur wahi masoomiyat dikhti hai — ekdum genuine, bina kisi dikhawe ke.",
     },
     {
       title: "Teri hassi",
-      message: "Duniya ki sabse achi awaaz — teri zor ki hassi. Jise sunke main sab bhool jaata hoon.",
+      message: "Jab tum khul ke hasti ho, bina kisi roke-toke — woh meri sabse favorite sound hai. Tumhe haste dekh kar dil khud-ba-khud khush ho jaata hai.",
     },
     {
       title: "Woh choti si baatein",
-      message: "Teri ek random voice note. Ek achanak 'khana khaya?' wali message. Yahi toh tum ho.",
+      message: "Din mein achanak aane wala 'khana khaya?' ka message, bina kahe meri baat samajh lena, aur choti choti cheezon mein itna dhyan rakhna... yahi choti baatein dil jeet leti hain.",
     },
     {
       title: "Tum meri hone wali ho",
-      message: "Yeh soch ke dil bhar aata hai — ki yeh zindagi ab tumhare saath hogi. Hamesha ke liye.",
+      message: "Yeh ehsaas hi kitna sukoon deta hai ki aage ki poori zindagi tumhare saath bitani hai... har mod pe, hamesha.",
     },
   ],
 
