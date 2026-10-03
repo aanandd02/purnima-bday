@@ -2,6 +2,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { asset } from "@/lib/assetPath";
 
 interface MediaViewerProps {
   items: { src: string; caption?: string; type?: "image" | "video"; poster?: string }[];
@@ -78,8 +79,8 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
         >
           {item.type === "video" ? (
             <video
-              src={item.src}
-              poster={item.poster}
+              src={asset(item.src)}
+              poster={item.poster ? asset(item.poster) : undefined}
               controls
               playsInline
               className="max-h-[80dvh] max-w-full rounded-xl object-contain"
@@ -87,7 +88,7 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
           ) : (
             <div className="relative max-h-[80dvh] max-w-full" style={{ aspectRatio: "9/16", width: "min(100%, 400px)" }}>
               <Image
-                src={item.src}
+                src={asset(item.src)}
                 alt={item.caption || "Memory"}
                 fill
                 className="object-contain rounded-xl"

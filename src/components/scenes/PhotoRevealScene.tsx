@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { birthdayConfig } from "@/lib/birthdayConfig";
+import { asset } from "@/lib/assetPath";
 
 interface PhotoRevealSceneProps {
   onContinue: () => void;
@@ -38,12 +39,13 @@ export function PhotoRevealScene({ onContinue }: PhotoRevealSceneProps) {
         transition={{ duration: 4, ease: [0.16, 1, 0.3, 1] }}
       >
         <Image
-          src={birthdayConfig.memories[5].src}
+          src={asset(birthdayConfig.memories[5]?.src || birthdayConfig.heroPhoto)}
           alt="Memory"
           fill
+          priority
           className="object-cover object-center"
           style={{ filter: "brightness(0.35) saturate(0.8)" }}
-          sizes="430px"
+          sizes="100vw"
         />
         {/* Gradient */}
         <div

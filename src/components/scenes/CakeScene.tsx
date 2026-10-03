@@ -5,6 +5,7 @@ import Image from "next/image";
 import { birthdayConfig } from "@/lib/birthdayConfig";
 import { haptic } from "@/lib/utils";
 import { audioManager } from "@/lib/audioManager";
+import { asset } from "@/lib/assetPath";
 
 interface CakeSceneProps {
   onBlown: () => void;
@@ -205,7 +206,7 @@ export function CakeScene({ onBlown, audioEnabled }: CakeSceneProps) {
               transition={{ duration: 0.8, ease: "easeInOut" }}
             >
               <Image
-                src="/media/cake/cake-lit.jpg"
+                src={asset("/media/cake/cake-lit.jpg")}
                 alt="Realistic 3D Birthday Cake with glowing candles"
                 fill
                 priority
@@ -238,7 +239,7 @@ export function CakeScene({ onBlown, audioEnabled }: CakeSceneProps) {
               transition={{ duration: 0.8, ease: "easeInOut" }}
             >
               <Image
-                src="/media/cake/cake-blown.jpg"
+                src={asset("/media/cake/cake-blown.jpg")}
                 alt="Realistic 3D Birthday Cake candles blown out"
                 fill
                 className="object-cover object-center scale-[1.03]"

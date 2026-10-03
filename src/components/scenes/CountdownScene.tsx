@@ -1,8 +1,10 @@
 "use client";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useCountdown } from "@/hooks/useCountdown";
 import { birthdayConfig } from "@/lib/birthdayConfig";
+import { asset } from "@/lib/assetPath";
 
 interface CountdownSceneProps {
   onContinue: () => void;
@@ -31,16 +33,41 @@ export function CountdownScene({ onContinue }: CountdownSceneProps) {
 
   return (
     <motion.div
-      className="scene relative"
+      className="scene relative overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
       style={{
         minHeight: "var(--vh-screen)",
-        background: "var(--charcoal)",
       }}
     >
+      {/* Blurred hero photo background */}
+      <motion.div
+        className="absolute inset-0 vignette pointer-events-none"
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <Image
+          src={asset(birthdayConfig.heroPhoto)}
+          alt="Purnima"
+          fill
+          priority
+          className="object-cover object-top"
+          style={{ filter: "blur(3px) brightness(0.4) saturate(0.65)" }}
+          sizes="100vw"
+        />
+        {/* Warm luxury overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(7,7,10,0.65) 0%, rgba(7,7,10,0.35) 50%, rgba(7,7,10,0.85) 100%)",
+          }}
+        />
+      </motion.div>
+
       <div className="relative z-10 flex flex-col items-center justify-center px-8 text-center" style={{ minHeight: "var(--vh-screen)" }}>
         {isToday || isPast ? (
           /* BIRTHDAY! */

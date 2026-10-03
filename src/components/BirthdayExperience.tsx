@@ -23,6 +23,7 @@ import { ProgressIndicator }    from "@/components/ui/ProgressIndicator";
 import { FloatingPetals }       from "@/components/ui/FloatingPetals";
 import { audioManager }         from "@/lib/audioManager";
 import { birthdayConfig }       from "@/lib/birthdayConfig";
+import { asset }                from "@/lib/assetPath";
 
 // ── Scene order ──────────────────────────────────────────
 type Scene =
@@ -68,10 +69,10 @@ const PROGRESS_SCENES: Scene[] = SCENE_ORDER.filter(
 // ── Audio setup ──────────────────────────────────────────
 function initAudio() {
   const a = birthdayConfig.audio;
-  audioManager.load("background", a.background);
-  audioManager.load("candle", a.candle);
-  audioManager.load("celebration", a.celebration);
-  audioManager.load("fireworks", a.fireworks);
+  audioManager.load("background", asset(a.background));
+  audioManager.load("candle", asset(a.candle));
+  audioManager.load("celebration", asset(a.celebration));
+  audioManager.load("fireworks", asset(a.fireworks));
 }
 
 // ── Main component ───────────────────────────────────────
