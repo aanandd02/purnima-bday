@@ -20,14 +20,9 @@ export function WishSequenceScene({ onContinue }: WishSequenceSceneProps) {
     }
   };
 
-  useEffect(() => {
-    if (done) return;
-    const t = setTimeout(() => {
-      advance();
-    }, 2800);
-    return () => clearTimeout(t);
-  }, [index, done, wishes.length]);
+  // NO auto-timer: Purnima controls the pace
 
+  // Scroll to advance manually
   useEffect(() => {
     let lastWheel = 0;
     const handleWheel = (e: WheelEvent) => {
@@ -42,6 +37,7 @@ export function WishSequenceScene({ onContinue }: WishSequenceSceneProps) {
     };
     window.addEventListener("wheel", handleWheel, { passive: true });
     return () => window.removeEventListener("wheel", handleWheel);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [done, index, wishes.length, onContinue]);
 
   return (
@@ -115,22 +111,37 @@ export function WishSequenceScene({ onContinue }: WishSequenceSceneProps) {
           </motion.div>
         )}
 
-        {/* Wish counter dots */}
+        {/* Wish counter dots + tap hint */}
         {!done && (
-          <div className="absolute bottom-8 sm:bottom-12 flex items-center gap-2 pointer-events-none">
-            {wishes.map((_, i) => (
-              <div
-                key={i}
-                style={{
-                  width: i === index ? 18 : 5,
-                  height: 5,
-                  borderRadius: 3,
-                  background: i === index ? "var(--gold)" : "rgba(255,255,255,0.25)",
-                  boxShadow: i === index ? "0 0 8px rgba(212,175,55,0.6)" : "none",
-                  transition: "all 0.35s ease",
-                }}
-              />
-            ))}
+          <div className="absolute bottom-8 sm:bottom-12 flex flex-col items-center gap-3">
+            <motion.p
+              animate={{ opacity: [0.3, 0.8, 0.3] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: "11px",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: "rgba(212,175,55,0.6)",
+              }}
+            >
+              tap to continue
+            </motion.p>
+            <div className="flex items-center gap-2 pointer-events-none">
+              {wishes.map((_, i) => (
+                <div
+                  key={i}
+                  style={{
+                    width: i === index ? 18 : 5,
+                    height: 5,
+                    borderRadius: 3,
+                    background: i === index ? "var(--gold)" : "rgba(255,255,255,0.25)",
+                    boxShadow: i === index ? "0 0 8px rgba(212,175,55,0.6)" : "none",
+                    transition: "all 0.35s ease",
+                  }}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>

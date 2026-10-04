@@ -16,11 +16,13 @@ import { CelebrationScene }     from "@/components/scenes/CelebrationScene";
 import { WishSequenceScene }    from "@/components/scenes/WishSequenceScene";
 import { YearAheadScene }       from "@/components/scenes/YearAheadScene";
 import { MemoryWallScene }      from "@/components/scenes/MemoryWallScene";
+import { LoveNoteScene }        from "@/components/scenes/LoveNoteScene";
 import { FinalScene }           from "@/components/scenes/FinalScene";
 
 import { AudioController }      from "@/components/ui/AudioController";
 import { ProgressIndicator }    from "@/components/ui/ProgressIndicator";
 import { FloatingPetals }       from "@/components/ui/FloatingPetals";
+import { LoverGate }            from "@/components/ui/LoverGate";
 import { audioManager }         from "@/lib/audioManager";
 import { birthdayConfig }       from "@/lib/birthdayConfig";
 import { asset }                from "@/lib/assetPath";
@@ -41,6 +43,7 @@ type Scene =
   | "wishes"
   | "yearAhead"
   | "memoryWall"
+  | "loveNote"
   | "final";
 
 const SCENE_ORDER: Scene[] = [
@@ -58,6 +61,7 @@ const SCENE_ORDER: Scene[] = [
   "wishes",
   "yearAhead",
   "memoryWall",
+  "loveNote",
   "final",
 ];
 
@@ -81,6 +85,9 @@ export default function BirthdayExperience() {
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [audioInitialized, setAudioInitialized] = useState(false);
   const [key, setKey] = useState(0); // for replay
+  // LoverGate — blocks scene skip with a secret question
+  const [gateOpen, setGateOpen] = useState(false);
+  const [pendingNext, setPendingNext] = useState<(() => void) | null>(null);
 
   const goTo = useCallback((s: Scene) => {
     // Scroll to top on scene change (mobile)
@@ -94,6 +101,25 @@ export default function BirthdayExperience() {
       goTo(SCENE_ORDER[currentIdx + 1]);
     }
   }, [scene, goTo]);
+
+  // Gate-protected next — used on scenes where skipping should be locked
+  const nextWithGate = useCallback(() => {
+    const currentIdx = SCENE_ORDER.indexOf(scene);
+    if (currentIdx < SCENE_ORDER.length - 1) {
+      const targetScene = SCENE_ORDER[currentIdx + 1];
+      // Open lover gate, store what to do on unlock
+      setPendingNext(() => () => goTo(targetScene));
+      setGateOpen(true);
+    }
+  }, [scene, goTo]);
+
+  const handleGateUnlock = useCallback(() => {
+    setGateOpen(false);
+    if (pendingNext) {
+      pendingNext();
+      setPendingNext(null);
+    }
+  }, [pendingNext]);
 
   // Initialize audio on first user interaction
   const handleBegin = useCallback(() => {
@@ -167,7 +193,7 @@ export default function BirthdayExperience() {
         )}
         {scene === "countdown" && (
           <motion.div key="countdown">
-            <CountdownScene onContinue={next} />
+            <CountdownScene onContinue={nextWithGate} />
           </motion.div>
         )}
         {scene === "photoReveal" && (
@@ -225,10 +251,22 @@ export default function BirthdayExperience() {
             <MemoryWallScene onContinue={next} />
           </motion.div>
         )}
+        {scene === "loveNote" && (
+          <motion.div key="loveNote">
+            <LoveNoteScene onContinue={next} />
+          </motion.div>
+        )}
         {scene === "final" && (
           <motion.div key="final">
             <FinalScene onReplay={handleReplay} />
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Lover Gate — blocks scene skip with secret question */}
+      <AnimatePresence>
+        {gateOpen && (
+          <LoverGate onUnlock={handleGateUnlock} />
         )}
       </AnimatePresence>
     </div>

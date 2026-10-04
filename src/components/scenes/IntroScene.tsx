@@ -120,7 +120,7 @@ export function IntroScene({ onBegin }: IntroSceneProps) {
               className="mt-8 mb-2 text-cream/55 text-base leading-relaxed max-w-[260px]"
               style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(15px, 4vw, 18px)" }}
             >
-              Tumhare liye kuch khaas… sirf tumhare liye.
+              Something truly special… crafted only for you.
             </motion.p>
           )}
         </AnimatePresence>
