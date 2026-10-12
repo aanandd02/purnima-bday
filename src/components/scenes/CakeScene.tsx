@@ -2,17 +2,17 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
-import { birthdayConfig } from "@/lib/birthdayConfig";
+import { storyConfig } from "@/lib/storyConfig";
 import { haptic } from "@/lib/utils";
 import { audioManager } from "@/lib/audioManager";
 import { asset } from "@/lib/assetPath";
 
 interface CakeSceneProps {
   onBlown: () => void;
-  audioEnabled: boolean;
+  audioEnabled?: boolean;
 }
 
-export function CakeScene({ onBlown, audioEnabled }: CakeSceneProps) {
+export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
   const [candlesBlown, setCandlesBlown] = useState(false);
   const [micAsked, setMicAsked] = useState(false);
   const [listening, setListening] = useState(false);
@@ -120,76 +120,69 @@ export function CakeScene({ onBlown, audioEnabled }: CakeSceneProps) {
         background: "radial-gradient(ellipse at 50% 40%, #151218 0%, #08080b 100%)",
       }}
     >
-      {/* Ambient Candlelight Warm Glow in background */}
+      {/* Warm Ambient Glow from candles */}
       <motion.div
-        className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         animate={{
-          scale: candlesBlown ? [1, 0] : [1, 1.08, 0.95, 1.04, 1],
-          opacity: candlesBlown ? 0 : [0.35, 0.5, 0.38, 0.48, 0.35],
+          scale: candlesBlown ? 0.3 : [1, 1.12, 0.98, 1.08, 1],
+          opacity: candlesBlown ? 0 : [0.35, 0.5, 0.4, 0.55, 0.35],
         }}
         transition={{
-          duration: candlesBlown ? 0.6 : 3,
+          duration: 2.4,
           repeat: candlesBlown ? 0 : Infinity,
           ease: "easeInOut",
         }}
         style={{
-          width: 320,
-          height: 320,
+          width: 440,
+          height: 440,
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(245,170,60,0.4) 0%, rgba(212,140,40,0.15) 45%, transparent 75%)",
-          filter: "blur(40px)",
+          background:
+            "radial-gradient(circle, rgba(255,180,60,0.3) 0%, rgba(212,140,40,0.12) 45%, transparent 70%)",
+          filter: "blur(60px)",
         }}
       />
 
       <div
-        className="relative z-10 flex flex-col items-center justify-center gap-3 sm:gap-5 px-4 py-4 my-auto text-center w-full max-w-sm"
+        className="relative z-10 flex flex-col items-center justify-between px-6 py-8 text-center safe-top safe-bottom my-auto"
         style={{ minHeight: "var(--vh-screen)" }}
       >
-        {/* Name above cake */}
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -12 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.9 }}
-          className="flex flex-col items-center gap-1"
+          transition={{ duration: 0.8 }}
+          className="flex flex-col items-center gap-1.5 pt-4"
         >
           <p
-            className="text-gold/80 text-[10px] sm:text-[11px] tracking-[0.35em] uppercase font-medium"
+            className="text-gold/80 text-[10px] tracking-[0.35em] uppercase font-medium"
             style={{ fontFamily: "var(--sans)" }}
           >
-            Happy Birthday
+            Happy Birthday, {storyConfig.name}
           </p>
           <h2
             style={{
               fontFamily: "var(--serif)",
-              fontSize: "clamp(26px, 7vw, 38px)",
+              fontSize: "clamp(26px, 7.5vw, 38px)",
               fontWeight: 300,
               color: "var(--cream)",
-              letterSpacing: "0.04em",
-              textShadow: "0 2px 20px rgba(212,175,55,0.25)",
+              lineHeight: 1.2,
             }}
           >
-            {birthdayConfig.name}
+            Blow Out Your Candles
           </h2>
         </motion.div>
 
-        {/* 3D Cake Visual Container */}
+        {/* 3D Cake Visual Container with Parallax Tilt */}
         <motion.div
-          className="relative flex items-center justify-center cursor-pointer select-none perspective-[1000px]"
+          className="relative my-4 flex items-center justify-center cursor-pointer"
           style={{
             rotateX,
             rotateY,
-            transformStyle: "preserve-3d",
+            transformPerspective: 900,
           }}
-          onClick={() => {
-            handleMicOrTap();
-            blowCandles();
-          }}
-          whileTap={{ scale: 0.97 }}
-          initial={{ opacity: 0, scale: 0.88, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+          onClick={blowCandles}
+          whileTap={{ scale: 0.98 }}
         >
-          {/* Cake Card with luxury depth shadow */}
           <div
             className="relative w-[270px] h-[270px] sm:w-[310px] sm:h-[310px] rounded-3xl overflow-hidden"
             style={{
@@ -343,7 +336,7 @@ export function CakeScene({ onBlown, audioEnabled }: CakeSceneProps) {
                   textShadow: "0 2px 10px rgba(0,0,0,0.5)",
                 }}
               >
-                Make a wish.
+                Make a wish from your heart.
               </p>
 
               <motion.button

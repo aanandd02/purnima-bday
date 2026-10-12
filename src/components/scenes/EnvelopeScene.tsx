@@ -54,7 +54,7 @@ export function EnvelopeScene({ onContinue }: EnvelopeSceneProps) {
                 lineHeight: 1.5,
               }}
             >
-              One message was saved especially for today.
+              A letter straight from my heart to yours.
             </p>
 
             {/* Envelope SVG */}

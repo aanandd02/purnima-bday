@@ -4,22 +4,36 @@
 
 /* ── Design tokens ──────────────────────────────────────── */
 :root {
-  --gold:               #D4AF37;
-  --gold-light:         #F3E5AB;
-  --gold-dim:           #A38346;
-  --cream:              #FDFBF7;
-  --cream-dim:          rgba(253,251,247,0.7);
+  /* Gold palette */
+  --gold:               #C9A96E;
+  --gold-light:         #EDD89A;
+  --gold-dim:           #8C6F3F;
+
+  /* Burgundy / rose palette */
+  --burgundy:           #7C2D3E;
+  --burgundy-dim:       rgba(124,45,62,0.45);
+  --blush:              rgba(220,130,150,0.55);
+  --rose:               #DC8296;
+
+  /* Neutral backgrounds */
+  --cream:              #F8F3EC;
+  --cream-dim:          rgba(248,243,236,0.65);
   --bg-deep:            #09090C;
-  --bg-warm:            #0E0E12;
-  --bg-card:            #14141A;
+  --bg-warm:            #0C0C10;
+  --bg-card:            #13131A;
   --black:              #09090C;
-  --charcoal:           #0E0E12;
-  --glass:              rgba(255,255,255,0.04);
-  --glass-border:       rgba(212,175,55,0.22);
-  --glass-border-subtle: rgba(255,255,255,0.08);
+  --charcoal:           #0C0C10;
+
+  /* Glass effects */
+  --glass:              rgba(255,255,255,0.035);
+  --glass-border:       rgba(201,169,110,0.22);
+  --glass-border-subtle: rgba(255,255,255,0.07);
+
+  /* Typography */
   --serif:              'Cormorant Garamond', Georgia, serif;
   --sans:               'Inter', system-ui, sans-serif;
 
+  /* Easing */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out:   cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -130,9 +144,11 @@ img, video {
   z-index: 1;
 }
 
-/* ── Gold text ──────────────────────────────────────────── */
-.text-gold   { color: var(--gold); }
-.text-cream  { color: var(--cream); }
+/* ── Gold & rose text helpers ──────────────────────────── */
+.text-gold     { color: var(--gold); }
+.text-cream    { color: var(--cream); }
+.text-burgundy { color: var(--burgundy); }
+.text-blush    { color: var(--rose); }
 
 /* ── CTA Button ─────────────────────────────────────────── */
 .btn-cinematic {

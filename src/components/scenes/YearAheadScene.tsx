@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { birthdayConfig } from "@/lib/birthdayConfig";
 import { haptic } from "@/lib/utils";
 import { audioManager } from "@/lib/audioManager";
@@ -35,6 +35,7 @@ export function YearAheadScene({ onContinue }: YearAheadSceneProps) {
   const stars = birthdayConfig.yearAhead.stars;
   const [secretTaps, setSecretTaps] = useState(0);
   const [easterEgg2, setEasterEgg2] = useState(false);
+  const easterEggShown = useRef(false);
 
   useEffect(() => {
     let triggered = false;
@@ -53,12 +54,17 @@ export function YearAheadScene({ onContinue }: YearAheadSceneProps) {
     setActiveIndex(i);
     setUnlockedStars((prev) => new Set(prev).add(i));
 
-    // Easter egg
-    setSecretTaps((t) => {
-      const next = t + 1;
-      if (next >= 6) setEasterEgg2(true);
-      return next;
-    });
+    // Easter egg — shows exactly once and never opens again
+    if (!easterEggShown.current) {
+      setSecretTaps((t) => {
+        const next = t + 1;
+        if (next === 7 && !easterEggShown.current) {
+          easterEggShown.current = true;
+          setEasterEgg2(true);
+        }
+        return next;
+      });
+    }
   };
 
   const handleNextWish = () => {
@@ -452,7 +458,10 @@ export function YearAheadScene({ onContinue }: YearAheadSceneProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[150] bg-black/90 flex flex-col items-center justify-center px-8 text-center"
-            onClick={() => setEasterEgg2(false)}
+            onClick={() => {
+              easterEggShown.current = true;
+              setEasterEgg2(false);
+            }}
           >
             <p
               className="text-gold text-xs tracking-widest uppercase mb-4 font-medium"

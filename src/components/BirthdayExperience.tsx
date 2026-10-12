@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback, useEffect, useReducer } from "react";
+import { useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { LoadingScene }         from "@/components/scenes/LoadingScene";
@@ -16,18 +16,13 @@ import { CelebrationScene }     from "@/components/scenes/CelebrationScene";
 import { WishSequenceScene }    from "@/components/scenes/WishSequenceScene";
 import { YearAheadScene }       from "@/components/scenes/YearAheadScene";
 import { MemoryWallScene }      from "@/components/scenes/MemoryWallScene";
-import { LoveNoteScene }        from "@/components/scenes/LoveNoteScene";
 import { FinalScene }           from "@/components/scenes/FinalScene";
 
-import { AudioController }      from "@/components/ui/AudioController";
 import { ProgressIndicator }    from "@/components/ui/ProgressIndicator";
 import { FloatingPetals }       from "@/components/ui/FloatingPetals";
 import { LoverGate }            from "@/components/ui/LoverGate";
-import { audioManager }         from "@/lib/audioManager";
-import { birthdayConfig }       from "@/lib/birthdayConfig";
-import { asset }                from "@/lib/assetPath";
 
-// ── Scene order ──────────────────────────────────────────
+// ── Scene order ───────────────────────────────────────────
 type Scene =
   | "loading"
   | "intro"
@@ -43,7 +38,6 @@ type Scene =
   | "wishes"
   | "yearAhead"
   | "memoryWall"
-  | "loveNote"
   | "final";
 
 const SCENE_ORDER: Scene[] = [
@@ -61,7 +55,6 @@ const SCENE_ORDER: Scene[] = [
   "wishes",
   "yearAhead",
   "memoryWall",
-  "loveNote",
   "final",
 ];
 
@@ -70,27 +63,15 @@ const PROGRESS_SCENES: Scene[] = SCENE_ORDER.filter(
   (s) => s !== "loading" && s !== "intro"
 );
 
-// ── Audio setup ──────────────────────────────────────────
-function initAudio() {
-  const a = birthdayConfig.audio;
-  audioManager.load("background", asset(a.background));
-  audioManager.load("candle", asset(a.candle));
-  audioManager.load("celebration", asset(a.celebration));
-  audioManager.load("fireworks", asset(a.fireworks));
-}
-
-// ── Main component ───────────────────────────────────────
+// ── Main component ────────────────────────────────────────
 export default function BirthdayExperience() {
   const [scene, setScene] = useState<Scene>("loading");
-  const [audioEnabled, setAudioEnabled] = useState(false);
-  const [audioInitialized, setAudioInitialized] = useState(false);
   const [key, setKey] = useState(0); // for replay
-  // LoverGate — blocks scene skip with a secret question
+  // LoverGate — blocks scene skip with secret question
   const [gateOpen, setGateOpen] = useState(false);
   const [pendingNext, setPendingNext] = useState<(() => void) | null>(null);
 
   const goTo = useCallback((s: Scene) => {
-    // Scroll to top on scene change (mobile)
     window.scrollTo({ top: 0, behavior: "instant" });
     setScene(s);
   }, []);
@@ -107,7 +88,6 @@ export default function BirthdayExperience() {
     const currentIdx = SCENE_ORDER.indexOf(scene);
     if (currentIdx < SCENE_ORDER.length - 1) {
       const targetScene = SCENE_ORDER[currentIdx + 1];
-      // Open lover gate, store what to do on unlock
       setPendingNext(() => () => goTo(targetScene));
       setGateOpen(true);
     }
@@ -121,44 +101,16 @@ export default function BirthdayExperience() {
     }
   }, [pendingNext]);
 
-  // Initialize audio on first user interaction
   const handleBegin = useCallback(() => {
-    if (!audioInitialized) {
-      initAudio();
-      setAudioInitialized(true);
-      setAudioEnabled(true);
-      audioManager.setEnabled(true);
-      // Start background music softly
-      setTimeout(() => {
-        audioManager.play("background", { loop: true, volume: 0.25 });
-      }, 300);
-    }
     next();
-  }, [audioInitialized, next]);
-
-  const handleToggleAudio = useCallback(() => {
-    const next = !audioEnabled;
-    setAudioEnabled(next);
-    audioManager.setEnabled(next);
-    if (next) {
-      // If re-enabling, restart BG music if on appropriate scene
-      audioManager.play("background", { loop: true, volume: 0.25 });
-    } else {
-      audioManager.stop("background");
-    }
-  }, [audioEnabled]);
+  }, [next]);
 
   const handleReplay = useCallback(() => {
-    // Stop all audio
-    audioManager.setEnabled(false);
-    setAudioEnabled(false);
-    setAudioInitialized(false);
     setKey((k) => k + 1);
-    setScene("intro"); // Skip loading on replay
+    setScene("intro");
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
-  // Progress index
   const progressIndex = PROGRESS_SCENES.indexOf(scene);
   const showProgress = !["loading", "intro", "celebration", "final"].includes(scene);
 
@@ -173,11 +125,6 @@ export default function BirthdayExperience() {
 
       {/* Floating petals ambient layer — visible after loading */}
       {scene !== "loading" && <FloatingPetals />}
-
-      {/* Audio control — visible after intro */}
-      {scene !== "loading" && scene !== "intro" && (
-        <AudioController enabled={audioEnabled} onToggle={handleToggleAudio} />
-      )}
 
       {/* Scenes */}
       <AnimatePresence mode="wait">
@@ -228,12 +175,12 @@ export default function BirthdayExperience() {
         )}
         {scene === "cake" && (
           <motion.div key="cake">
-            <CakeScene onBlown={next} audioEnabled={audioEnabled} />
+            <CakeScene onBlown={next} audioEnabled={false} />
           </motion.div>
         )}
         {scene === "celebration" && (
           <motion.div key="celebration">
-            <CelebrationScene onContinue={next} audioEnabled={audioEnabled} />
+            <CelebrationScene onContinue={next} audioEnabled={false} />
           </motion.div>
         )}
         {scene === "wishes" && (
@@ -251,11 +198,6 @@ export default function BirthdayExperience() {
             <MemoryWallScene onContinue={next} />
           </motion.div>
         )}
-        {scene === "loveNote" && (
-          <motion.div key="loveNote">
-            <LoveNoteScene onContinue={next} />
-          </motion.div>
-        )}
         {scene === "final" && (
           <motion.div key="final">
             <FinalScene onReplay={handleReplay} />
@@ -263,7 +205,7 @@ export default function BirthdayExperience() {
         )}
       </AnimatePresence>
 
-      {/* Lover Gate — blocks scene skip with secret question */}
+      {/* Lover Gate */}
       <AnimatePresence>
         {gateOpen && (
           <LoverGate onUnlock={handleGateUnlock} />

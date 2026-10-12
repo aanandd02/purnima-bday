@@ -7,18 +7,48 @@ interface LoverGateProps {
 }
 
 const CORRECT_ANSWERS = [
+  "9",
+  "09",
+  "9th",
+  "nine",
+  "nau",
+  "no",
+  "9 tarik",
+  "9 tarikh",
+  "9 tareekh",
+  "tarik 9",
+  "tarikh 9",
+  "tareekh 9",
+  "date 9",
+  "9 date",
   "9 aug",
   "9aug",
   "9 august",
   "9august",
   "09 aug",
-  "09aug",
   "09 august",
-  "09august",
+  "9 oct",
+  "9oct",
+  "9 october",
+  "9october",
+  "09 oct",
+  "09 october",
+  "9 sep",
+  "9sep",
+  "9 september",
+  "9september",
+  "09 sep",
+  "09 september",
 ];
 
 function isCorrect(input: string): boolean {
-  return CORRECT_ANSWERS.includes(input.trim().toLowerCase());
+  const clean = input.trim().toLowerCase().replace(/,/g, "").replace(/\./g, "").replace(/-/g, " ");
+  if (CORRECT_ANSWERS.includes(clean)) return true;
+  // If the user typed 9 anywhere (e.g. "9th", "tarik 9", "number 9")
+  if (/\b9\b/.test(clean) || clean.includes("9") || clean.includes("nine") || clean.includes("nau")) {
+    return true;
+  }
+  return false;
 }
 
 export function LoverGate({ onUnlock }: LoverGateProps) {
@@ -39,7 +69,7 @@ export function LoverGate({ onUnlock }: LoverGateProps) {
     if (isCorrect(value)) {
       setSuccess(true);
       setWrong(false);
-      setTimeout(onUnlock, 1200);
+      setTimeout(onUnlock, 1800);
     } else {
       setAttempts((a) => a + 1);
       setWrong(true);
@@ -53,10 +83,10 @@ export function LoverGate({ onUnlock }: LoverGateProps) {
   };
 
   const hintMessage =
-    attempts >= 3
-      ? "💛 Hint: It was that August day…"
+    attempts >= 2
+      ? "💛 Hint: 9 August ko mile, 9 October ko rishte ke liye ha hui… kaun si taarikh hai?"
       : attempts >= 1
-      ? "Think again… that very first meeting."
+      ? "Think about our lucky date… that one special number."
       : null;
 
   return (
@@ -179,20 +209,31 @@ export function LoverGate({ onUnlock }: LoverGateProps) {
                     color: "var(--gold-dim)",
                   }}
                 >
-                  A secret question first
+                  A Secret Question First
                 </p>
                 <h3
-                  className="text-center mb-6"
+                  className="text-center mb-2"
                   style={{
                     fontFamily: "var(--serif)",
                     fontStyle: "italic",
-                    fontSize: "clamp(18px, 4.8vw, 22px)",
+                    fontSize: "clamp(19px, 5vw, 23px)",
                     color: "var(--cream)",
-                    lineHeight: 1.4,
+                    lineHeight: 1.35,
                   }}
                 >
-                  When did we first meet?
+                  What is the luckiest number for us? ✨
                 </h3>
+                <p
+                  className="text-center mb-5"
+                  style={{
+                    fontFamily: "var(--sans)",
+                    fontSize: "11px",
+                    color: "rgba(212,175,55,0.7)",
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  The special date that started everything…
+                </p>
 
                 <div className="relative mb-3">
                   <input
@@ -204,7 +245,7 @@ export function LoverGate({ onUnlock }: LoverGateProps) {
                       setWrong(false);
                     }}
                     onKeyDown={handleKey}
-                    placeholder="Write that special day…"
+                    placeholder="Enter our lucky number…"
                     autoComplete="off"
                     autoCapitalize="off"
                     spellCheck={false}
@@ -234,7 +275,8 @@ export function LoverGate({ onUnlock }: LoverGateProps) {
                       style={{
                         fontFamily: "var(--sans)",
                         fontSize: "12px",
-                        color: attempts >= 3 ? "rgba(212,175,55,0.7)" : "rgba(220,100,100,0.75)",
+                        color: attempts >= 2 ? "rgba(212,175,55,0.85)" : "rgba(220,100,100,0.75)",
+                        lineHeight: 1.4,
                       }}
                     >
                       {hintMessage}
@@ -253,7 +295,7 @@ export function LoverGate({ onUnlock }: LoverGateProps) {
                     justifyContent: "center",
                   }}
                 >
-                  I remember 💌
+                  Unlock with Love 💌
                 </motion.button>
 
                 <p
@@ -280,23 +322,37 @@ export function LoverGate({ onUnlock }: LoverGateProps) {
                   style={{
                     fontFamily: "var(--serif)",
                     fontStyle: "italic",
-                    fontSize: "clamp(20px, 5.5vw, 26px)",
+                    fontSize: "clamp(22px, 6vw, 28px)",
                     color: "var(--gold-light)",
-                    lineHeight: 1.4,
+                    lineHeight: 1.3,
                     marginBottom: 8,
                   }}
                 >
-                  You remembered. 🌹
+                  Number 9 🌹
                 </p>
                 <p
                   style={{
                     fontFamily: "var(--sans)",
-                    fontSize: "13px",
-                    color: "rgba(245,240,232,0.5)",
-                    letterSpacing: "0.05em",
+                    fontSize: "12px",
+                    color: "rgba(245,240,232,0.75)",
+                    lineHeight: 1.6,
+                    letterSpacing: "0.04em",
                   }}
                 >
-                  Let's continue…
+                  9 August — The day we met.
+                  <br />
+                  9 October — Our families said yes.
+                </p>
+                <p
+                  style={{
+                    fontFamily: "var(--serif)",
+                    fontStyle: "italic",
+                    fontSize: "14px",
+                    color: "var(--gold)",
+                    marginTop: 8,
+                  }}
+                >
+                  Our luckiest number, forever. 🤍
                 </p>
               </motion.div>
             )}

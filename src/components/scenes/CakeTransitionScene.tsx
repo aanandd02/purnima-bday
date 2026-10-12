@@ -1,23 +1,26 @@
 "use client";
-import { useEffect } from "react";
-import { motion } from "framer-motion";
-import { birthdayConfig } from "@/lib/birthdayConfig";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { storyConfig } from "@/lib/storyConfig";
 
 interface CakeTransitionSceneProps {
   onContinue: () => void;
 }
 
 export function CakeTransitionScene({ onContinue }: CakeTransitionSceneProps) {
+  const [phase, setPhase] = useState(0);
+
   useEffect(() => {
-    let triggered = false;
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 30 && !triggered) {
-        triggered = true;
-        onContinue();
-      }
+    const t1 = setTimeout(() => setPhase(1), 500);
+    const t2 = setTimeout(() => setPhase(2), 1800);
+    const t3 = setTimeout(() => setPhase(3), 3200);
+    const t4 = setTimeout(() => onContinue(), 5200);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
     };
-    window.addEventListener("wheel", handleWheel, { passive: true });
-    return () => window.removeEventListener("wheel", handleWheel);
   }, [onContinue]);
 
   return (
@@ -25,68 +28,114 @@ export function CakeTransitionScene({ onContinue }: CakeTransitionSceneProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 1.2 }}
-      className="scene overflow-y-auto hide-scrollbar"
+      transition={{ duration: 0.8 }}
+      className="scene flex flex-col items-center justify-center"
       style={{
         minHeight: "var(--vh-screen)",
-        background: "var(--charcoal)",
+        background: "radial-gradient(ellipse at 50% 50%, rgba(90,20,35,0.4) 0%, #07060A 70%)",
       }}
     >
-      <div className="relative z-10 flex flex-col items-center justify-center gap-5 sm:gap-7 px-6 py-8 my-auto text-center w-full max-w-sm" style={{ minHeight: "var(--vh-screen)" }}>
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 1 }}
-          style={{
-            fontFamily: "var(--serif)",
-            fontSize: "clamp(26px, 7vw, 38px)",
-            fontWeight: 300,
-            color: "var(--cream)",
-            lineHeight: 1.3,
-          }}
-        >
-          {birthdayConfig.cakeTransition.line1}
-        </motion.p>
+      {/* Warm center glow */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+        style={{
+          width: 360,
+          height: 360,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(180,60,80,0.18) 0%, rgba(212,175,55,0.08) 50%, transparent 70%)",
+          filter: "blur(60px)",
+        }}
+      />
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.1, duration: 0.9 }}
-          style={{
-            fontFamily: "var(--sans)",
-            fontSize: "clamp(13px, 3.6vw, 16px)",
-            color: "rgba(245,240,232,0.55)",
-            letterSpacing: "0.04em",
-          }}
-        >
-          {birthdayConfig.cakeTransition.line2}
-        </motion.p>
+      <div className="relative z-10 flex flex-col items-center gap-5 text-center px-10">
+        {/* Ornamental divider */}
+        <AnimatePresence>
+          {phase >= 1 && (
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-center gap-3"
+            >
+              <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
+              <span style={{ color: "rgba(212,175,55,0.6)", fontSize: 14 }}>✦</span>
+              <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.9, duration: 1 }}
-          style={{
-            fontFamily: "var(--serif)",
-            fontStyle: "italic",
-            fontSize: "clamp(22px, 5.8vw, 32px)",
-            color: "var(--gold)",
-            lineHeight: 1.3,
-          }}
-        >
-          {birthdayConfig.cakeTransition.line3}
-        </motion.p>
+        <AnimatePresence>
+          {phase >= 1 && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.1 }}
+              style={{
+                fontFamily: "var(--serif)",
+                fontStyle: "italic",
+                fontSize: "clamp(15px, 4vw, 18px)",
+                color: "rgba(245,240,232,0.35)",
+              }}
+            >
+              {storyConfig.cakeTransition.line1}
+            </motion.p>
+          )}
+        </AnimatePresence>
 
-        <motion.button
-          className="btn-cinematic mt-3"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.7, duration: 0.8 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={onContinue}
-        >
-          I'm ready
-        </motion.button>
+        <AnimatePresence>
+          {phase >= 2 && (
+            <motion.h2
+              initial={{ opacity: 0, y: 18, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                fontFamily: "var(--serif)",
+                fontSize: "clamp(36px, 11vw, 64px)",
+                fontWeight: 300,
+                color: "var(--gold-light)",
+                lineHeight: 1,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              {storyConfig.cakeTransition.line2}
+            </motion.h2>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {phase >= 3 && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              style={{
+                fontFamily: "var(--serif)",
+                fontStyle: "italic",
+                fontSize: "clamp(14px, 3.8vw, 17px)",
+                color: "rgba(245,240,232,0.5)",
+                maxWidth: 260,
+                lineHeight: 1.6,
+              }}
+            >
+              {storyConfig.cakeTransition.line3}
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {phase >= 1 && (
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              className="flex items-center gap-3"
+            >
+              <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
+              <span style={{ color: "rgba(212,175,55,0.6)", fontSize: 14 }}>✦</span>
+              <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );

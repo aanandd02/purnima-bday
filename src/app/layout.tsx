@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "For Purnima — October 18",
-  description: "A private birthday experience.",
+  title: "Our Story — For Purnima",
+  description: "A private, heartfelt experience celebrating our story.",
   robots: "noindex,nofollow",
 };
 

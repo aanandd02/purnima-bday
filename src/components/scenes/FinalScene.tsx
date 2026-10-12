@@ -33,7 +33,6 @@ function useTypewriter(text: string, speed = 45, delay = 0) {
   return { displayed, done };
 }
 
-// Shooting star
 function ShootingStar({ delay, top, duration }: { delay: number; top: string; duration: number }) {
   return (
     <motion.div
@@ -43,7 +42,7 @@ function ShootingStar({ delay, top, duration }: { delay: number; top: string; du
         left: "-10%",
         width: 120,
         height: 1,
-        background: "linear-gradient(90deg, transparent, rgba(255,215,0,0.9), transparent)",
+        background: "linear-gradient(90deg, transparent, rgba(201,169,110,0.9), transparent)",
         rotate: 20,
       }}
       animate={{ x: ["0%", "130vw"], opacity: [0, 1, 1, 0] }}
@@ -63,15 +62,19 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
   const [showReplay, setShowReplay] = useState(false);
 
   const mainText = birthdayConfig.final.main;
-  const { displayed: typedMain, done: mainDone } = useTypewriter(mainText, 55, 600);
+  const { displayed: typedMain, done: mainDone } = useTypewriter(mainText, 45, 600);
 
-  // Stagger phases
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase(1), 2200);
-    const t2 = setTimeout(() => setPhase(2), 3800);
-    const t3 = setTimeout(() => setPhase(3), 5400);
-    const t4 = setTimeout(() => setShowReplay(true), 7000);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
+    const t1 = setTimeout(() => setPhase(1), 2000);
+    const t2 = setTimeout(() => setPhase(2), 3600);
+    const t3 = setTimeout(() => setPhase(3), 5200);
+    const t4 = setTimeout(() => setShowReplay(true), 6800);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+    };
   }, []);
 
   return (
@@ -79,16 +82,15 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 2 }}
-      className="scene"
+      transition={{ duration: 1.8 }}
+      className="scene relative overflow-y-auto hide-scrollbar"
       style={{
         minHeight: "var(--vh-screen)",
-        background: "radial-gradient(ellipse at 50% 60%, #0e0a14 0%, #060508 100%)",
-        overflow: "hidden",
+        background: "radial-gradient(ellipse at 50% 45%, rgba(65,12,25,0.92) 0%, #060408 100%)",
       }}
     >
       {/* Twinkling star field */}
-      {Array.from({ length: 40 }).map((_, i) => (
+      {Array.from({ length: 45 }).map((_, i) => (
         <motion.div
           key={i}
           className="absolute rounded-full pointer-events-none"
@@ -97,7 +99,7 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
             height: (i % 3) + 1,
             top: `${(i * 23) % 95}%`,
             left: `${(i * 37) % 96}%`,
-            background: i % 5 === 0 ? "rgba(255,210,150,0.9)" : "rgba(255,255,255,0.7)",
+            background: i % 4 === 0 ? "rgba(255,215,130,0.85)" : "rgba(255,255,255,0.6)",
           }}
           animate={{ opacity: [0.1, 0.9, 0.1], scale: [0.7, 1.4, 0.7] }}
           transition={{
@@ -109,7 +111,6 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
         />
       ))}
 
-      {/* Shooting stars */}
       <ShootingStar delay={1} top="12%" duration={1.4} />
       <ShootingStar delay={4.5} top="28%" duration={1.1} />
       <ShootingStar delay={8} top="18%" duration={1.6} />
@@ -118,44 +119,118 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         style={{
-          width: 380,
-          height: 380,
+          width: 420,
+          height: 420,
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(180,60,100,0.1) 0%, rgba(201,169,110,0.06) 45%, transparent 75%)",
-          filter: "blur(50px)",
+          background:
+            "radial-gradient(circle, rgba(160,45,70,0.22) 0%, rgba(201,169,110,0.1) 45%, transparent 75%)",
+          filter: "blur(60px)",
         }}
       />
 
       {/* Content */}
       <div
-        className="relative z-10 flex flex-col items-center justify-center gap-5 px-8 text-center safe-bottom"
+        className="relative z-10 flex flex-col items-center justify-center gap-4 px-6 py-8 text-center safe-bottom my-auto w-full max-w-sm mx-auto"
         style={{ minHeight: "var(--vh-screen)" }}
       >
-        {/* Rose */}
+        {/* Rose with soft glowing halo */}
         <motion.div
           initial={{ opacity: 0, scale: 0, rotate: -20 }}
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ delay: 0.2, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          style={{ position: "relative" }}
         >
+          <div
+            className="absolute inset-0 -m-6 pointer-events-none"
+            style={{
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(255,100,140,0.35) 0%, transparent 70%)",
+              filter: "blur(18px)",
+            }}
+          />
           <motion.span
-            animate={{ scale: [1, 1.18, 1], rotate: [0, 3, -3, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            style={{ fontSize: 42, display: "block", lineHeight: 1 }}
+            animate={{ scale: [1, 1.15, 1], rotate: [0, 3, -3, 0] }}
+            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+            style={{ fontSize: 46, display: "block", lineHeight: 1 }}
           >
             🌹
           </motion.span>
         </motion.div>
 
+        {/* Milestone Dates badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.8 }}
+          className="flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-gold/25 bg-gold/5 backdrop-blur-md"
+        >
+          <span
+            style={{
+              fontFamily: "var(--sans)",
+              fontSize: "9.5px",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "rgba(201,169,110,0.7)",
+            }}
+          >
+            9 Aug
+          </span>
+          <div className="w-3 h-px" style={{ background: "rgba(201,169,110,0.4)" }} />
+          <span
+            style={{
+              fontFamily: "var(--sans)",
+              fontSize: "9.5px",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "rgba(201,169,110,0.7)",
+            }}
+          >
+            9 Oct
+          </span>
+          <div className="w-3 h-px" style={{ background: "rgba(201,169,110,0.4)" }} />
+          <span
+            style={{
+              fontFamily: "var(--sans)",
+              fontSize: "9.5px",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--gold-light)",
+              fontWeight: 600,
+            }}
+          >
+            18 Oct ✨
+          </span>
+        </motion.div>
+
+        {/* Special Eyebrow */}
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          style={{
+            fontFamily: "var(--sans)",
+            fontSize: "10px",
+            letterSpacing: "0.26em",
+            textTransform: "uppercase",
+            color: "var(--gold)",
+            opacity: 0.85,
+            marginTop: 4,
+          }}
+        >
+          {birthdayConfig.final.eyebrow}
+        </motion.p>
+
         {/* Typewriter main message */}
-        <div style={{ minHeight: 60 }}>
+        <div style={{ minHeight: 65 }} className="flex items-center justify-center">
           <h2
             style={{
               fontFamily: "var(--serif)",
-              fontSize: "clamp(26px, 7.5vw, 42px)",
-              fontWeight: 300,
-              color: "var(--cream)",
-              lineHeight: 1.3,
-              maxWidth: 300,
+              fontSize: "clamp(25px, 7vw, 40px)",
+              fontWeight: 400,
+              color: "var(--gold-light)",
+              lineHeight: 1.25,
+              maxWidth: 320,
+              textShadow: "0 0 35px rgba(212,175,55,0.45)",
             }}
           >
             {typedMain}
@@ -175,29 +250,53 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
         <AnimatePresence>
           {phase >= 1 && (
             <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8 }}
-              className="w-10 h-[1px]"
-              style={{ background: "var(--gold)", transformOrigin: "center" }}
-            />
+              className="flex items-center gap-3 my-0.5"
+            >
+              <div className="w-8 h-px" style={{ background: "var(--gold)", opacity: 0.5 }} />
+              <span style={{ color: "var(--gold)", fontSize: 11 }}>✦</span>
+              <div className="w-8 h-px" style={{ background: "var(--gold)", opacity: 0.5 }} />
+            </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Line 2 */}
+        {/* Line 1 - Deep heartfelt praise */}
         <AnimatePresence>
           {phase >= 1 && (
             <motion.p
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2 }}
+              transition={{ duration: 1 }}
               style={{
                 fontFamily: "var(--serif)",
                 fontStyle: "italic",
-                fontSize: "clamp(14px, 3.8vw, 18px)",
-                color: "rgba(245,240,232,0.6)",
-                lineHeight: 1.7,
-                maxWidth: 280,
+                fontSize: "clamp(14px, 3.8vw, 17px)",
+                color: "rgba(253,248,240,0.85)",
+                lineHeight: 1.65,
+                maxWidth: 295,
+              }}
+            >
+              {birthdayConfig.final.line1}
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        {/* Line 2 - Calm in chaos */}
+        <AnimatePresence>
+          {phase >= 2 && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              style={{
+                fontFamily: "var(--serif)",
+                fontStyle: "italic",
+                fontSize: "clamp(13px, 3.5vw, 16px)",
+                color: "rgba(253,248,240,0.65)",
+                lineHeight: 1.65,
+                maxWidth: 285,
               }}
             >
               {birthdayConfig.final.line2}
@@ -205,20 +304,21 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
           )}
         </AnimatePresence>
 
-        {/* Line 3 */}
+        {/* Line 3 - First birthday together */}
         <AnimatePresence>
           {phase >= 2 && (
             <motion.p
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2 }}
+              transition={{ duration: 1 }}
               style={{
                 fontFamily: "var(--serif)",
                 fontStyle: "italic",
-                fontSize: "clamp(13px, 3.5vw, 16px)",
-                color: "rgba(245,240,232,0.38)",
-                maxWidth: 270,
-                lineHeight: 1.7,
+                fontSize: "clamp(13px, 3.4vw, 15px)",
+                color: "var(--gold)",
+                opacity: 0.9,
+                lineHeight: 1.6,
+                maxWidth: 275,
               }}
             >
               {birthdayConfig.final.line3}
@@ -226,34 +326,33 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
           )}
         </AnimatePresence>
 
-        {/* Promise */}
+        {/* Heartbeat audio visualizer & romantic promise */}
         <AnimatePresence>
           {phase >= 3 && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1 }}
-              className="flex flex-col items-center gap-2"
+              className="flex flex-col items-center gap-2.5 mt-2"
             >
-              {/* Heartbeat bar */}
-              <motion.div
-                className="flex items-center gap-[2px]"
-                style={{ height: 24 }}
-              >
-                {[4, 8, 4, 20, 8, 4, 14, 4, 8, 4, 20, 8, 4].map((h, i) => (
+              <motion.div className="flex items-center gap-[3px]" style={{ height: 22 }}>
+                {[4, 9, 5, 22, 9, 5, 16, 5, 9, 5, 22, 9, 4].map((h, i) => (
                   <motion.div
                     key={i}
                     className="rounded-full"
                     style={{
-                      width: 2,
-                      background: i === 3 || i === 10 ? "rgba(220,80,120,0.8)" : "rgba(212,175,55,0.45)",
+                      width: 2.5,
+                      background:
+                        i === 3 || i === 10
+                          ? "rgba(255,120,160,0.85)"
+                          : "rgba(212,175,55,0.5)",
                       height: h,
                     }}
-                    animate={{ scaleY: [1, 1.3, 1] }}
+                    animate={{ scaleY: [1, 1.35, 1] }}
                     transition={{
-                      duration: 0.8,
+                      duration: 0.85,
                       repeat: Infinity,
-                      delay: i * 0.06,
+                      delay: i * 0.05,
                       ease: "easeInOut",
                     }}
                   />
@@ -264,47 +363,37 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
                 style={{
                   fontFamily: "var(--serif)",
                   fontStyle: "italic",
-                  fontSize: "clamp(13px, 3.4vw, 16px)",
-                  color: "rgba(220,130,160,0.65)",
-                  maxWidth: 240,
-                  lineHeight: 1.6,
+                  fontSize: "clamp(13.5px, 3.6vw, 16px)",
+                  color: "rgba(255,180,205,0.8)",
+                  maxWidth: 260,
+                  lineHeight: 1.5,
                   textAlign: "center",
                 }}
               >
-                I am here. Today, tomorrow, always.
+                {birthdayConfig.final.heartbeat}
               </p>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Replay */}
+        {/* Replay button */}
         <AnimatePresence>
           {showReplay && (
             <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
               onClick={onReplay}
-              className="mt-2"
+              className="mt-4 px-6 py-2.5 rounded-full border border-gold/30 hover:border-gold/60 text-gold/70 hover:text-gold transition-all"
               style={{
-                background: "none",
-                border: "none",
-                color: "rgba(201,169,110,0.35)",
+                background: "rgba(212,175,55,0.06)",
                 fontFamily: "var(--sans)",
-                fontSize: "12px",
-                letterSpacing: "0.1em",
+                fontSize: "11px",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
                 cursor: "pointer",
-                padding: "12px 24px",
-                minHeight: 44,
-                transition: "color 0.3s",
               }}
               whileTap={{ scale: 0.95 }}
-              onMouseEnter={(e) =>
-                ((e.target as HTMLButtonElement).style.color = "rgba(201,169,110,0.85)")
-              }
-              onMouseLeave={(e) =>
-                ((e.target as HTMLButtonElement).style.color = "rgba(201,169,110,0.35)")
-              }
             >
               {birthdayConfig.final.replay}
             </motion.button>

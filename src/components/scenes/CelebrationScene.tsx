@@ -1,21 +1,19 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { birthdayConfig } from "@/lib/birthdayConfig";
-import { audioManager } from "@/lib/audioManager";
+import { storyConfig } from "@/lib/storyConfig";
 import { haptic } from "@/lib/utils";
 
 interface CelebrationSceneProps {
   onContinue: () => void;
-  audioEnabled: boolean;
+  audioEnabled: boolean; // kept for prop compat, ignored
 }
 
-export function CelebrationScene({ onContinue, audioEnabled }: CelebrationSceneProps) {
+export function CelebrationScene({ onContinue }: CelebrationSceneProps) {
   const confettiStarted = useRef(false);
   const [showContinue, setShowContinue] = useState(false);
   const [rainHearts, setRainHearts] = useState<{ id: number; left: number; delay: number; size: number; dur: number }[]>([]);
 
-  // Heart rain
   useEffect(() => {
     const hearts = Array.from({ length: 18 }, (_, i) => ({
       id: i,
@@ -49,13 +47,8 @@ export function CelebrationScene({ onContinue, audioEnabled }: CelebrationSceneP
     confettiStarted.current = true;
 
     haptic([30, 60, 30, 60, 30]);
-    if (audioEnabled) {
-      audioManager.play("celebration", { volume: 0.7, loop: false });
-      setTimeout(() => audioManager.play("fireworks", { volume: 0.5 }), 800);
-    }
 
     import("canvas-confetti").then(({ default: confetti }) => {
-      // Big center burst
       confetti({
         particleCount: 130,
         spread: 90,
@@ -65,18 +58,15 @@ export function CelebrationScene({ onContinue, audioEnabled }: CelebrationSceneP
         shapes: ["circle", "square"],
       });
 
-      // Left & right side bursts
       setTimeout(() => {
         confetti({ particleCount: 70, angle: 60, spread: 60, origin: { x: 0, y: 0.65 }, colors: ["#C9A96E", "#FF8FA3", "#F5F0E8"] });
         confetti({ particleCount: 70, angle: 120, spread: 60, origin: { x: 1, y: 0.65 }, colors: ["#C9A96E", "#FFD6E0", "#ffffff"] });
       }, 450);
 
-      // Second wave
       setTimeout(() => {
         confetti({ particleCount: 90, spread: 75, origin: { y: 0.5 }, gravity: 0.65, colors: ["#D4AF37", "#fff", "#FFB6C1"] });
       }, 1300);
 
-      // Soft heart shower from top
       setTimeout(() => {
         confetti({
           particleCount: 40,
@@ -89,7 +79,7 @@ export function CelebrationScene({ onContinue, audioEnabled }: CelebrationSceneP
         });
       }, 1800);
     }).catch(() => {});
-  }, [audioEnabled]);
+  }, []);
 
   return (
     <motion.div
@@ -139,24 +129,24 @@ export function CelebrationScene({ onContinue, audioEnabled }: CelebrationSceneP
         className="relative z-10 flex flex-col items-center justify-center gap-4 px-6 text-center"
         style={{ minHeight: "var(--vh-screen)" }}
       >
-        {/* HAPPY BIRTHDAY label */}
+        {/* Label */}
         <motion.p
           initial={{ opacity: 0, y: 30, letterSpacing: "0.1em" }}
           animate={{ opacity: 1, y: 0, letterSpacing: "0.3em" }}
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
           style={{
             fontFamily: "var(--sans)",
-            fontSize: "clamp(12px, 3.5vw, 15px)",
+            fontSize: "clamp(11px, 3vw, 13px)",
             fontWeight: 400,
             color: "var(--gold)",
             letterSpacing: "0.3em",
             textTransform: "uppercase",
           }}
         >
-          {birthdayConfig.celebration.mainText}
+          {storyConfig.celebration.mainText}
         </motion.p>
 
-        {/* Name — big cinematic */}
+        {/* Big word */}
         <motion.h1
           initial={{ opacity: 0, scale: 0.7 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -170,7 +160,7 @@ export function CelebrationScene({ onContinue, audioEnabled }: CelebrationSceneP
             letterSpacing: "-0.02em",
           }}
         >
-          {birthdayConfig.celebration.name}
+          {storyConfig.celebration.name}
         </motion.h1>
 
         {/* Divider with heart */}
@@ -210,7 +200,7 @@ export function CelebrationScene({ onContinue, audioEnabled }: CelebrationSceneP
           ))}
         </motion.div>
 
-        {/* Romantic sub text */}
+        {/* Romantic subtext */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -220,11 +210,11 @@ export function CelebrationScene({ onContinue, audioEnabled }: CelebrationSceneP
             fontStyle: "italic",
             fontSize: "clamp(13px, 3.5vw, 16px)",
             color: "rgba(255,180,210,0.5)",
-            maxWidth: 240,
+            maxWidth: 260,
             lineHeight: 1.6,
           }}
         >
-          Today belongs to the most extraordinary person in the world. 🌹
+          To the girl who brings all the light into my world. Happy Birthday, my love. 🌹
         </motion.p>
 
         {/* Continue */}

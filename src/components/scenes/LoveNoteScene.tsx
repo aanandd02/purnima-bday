@@ -2,17 +2,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef } from "react";
 import { haptic } from "@/lib/utils";
+import { storyConfig } from "@/lib/storyConfig";
 
 interface LoveNoteSceneProps {
   onContinue: () => void;
 }
 
-const PROMPTS = [
-  "The day I find myself reminiscing about the most with you…",
-  "When you are beside me, it feels like…",
-  "The very first thing that took my breath away about you was…",
-  "A dream I quietly wish to live with you is…",
-];
+const PROMPTS = storyConfig.myFeelings.prompts as readonly string[];
 
 export function LoveNoteScene({ onContinue }: LoveNoteSceneProps) {
   const [promptIdx] = useState(() => Math.floor(Math.random() * PROMPTS.length));
