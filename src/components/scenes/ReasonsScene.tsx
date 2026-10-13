@@ -253,7 +253,7 @@ export function ReasonsScene({ onContinue }: ReasonsSceneProps) {
             color: "var(--gold-light)",
           }}
         >
-          {"There's more ›"}
+          There&rsquo;s more ›
         </motion.button>
       </div>
     </motion.div>

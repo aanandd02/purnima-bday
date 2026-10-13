@@ -162,44 +162,41 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.8 }}
-          className="flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-gold/25 bg-gold/5 backdrop-blur-md"
+          className="flex flex-col items-center gap-1.5 px-4 py-2.5 rounded-2xl border border-gold/20 bg-gold/5 backdrop-blur-md"
         >
-          <span
-            style={{
-              fontFamily: "var(--sans)",
-              fontSize: "9.5px",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "rgba(201,169,110,0.7)",
-            }}
-          >
-            9 Aug
-          </span>
-          <div className="w-3 h-px" style={{ background: "rgba(201,169,110,0.4)" }} />
-          <span
-            style={{
-              fontFamily: "var(--sans)",
-              fontSize: "9.5px",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "rgba(201,169,110,0.7)",
-            }}
-          >
-            9 Oct
-          </span>
-          <div className="w-3 h-px" style={{ background: "rgba(201,169,110,0.4)" }} />
-          <span
-            style={{
-              fontFamily: "var(--sans)",
-              fontSize: "9.5px",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "var(--gold-light)",
-              fontWeight: 600,
-            }}
-          >
-            18 Oct ✨
-          </span>
+          <p style={{
+            fontFamily: "var(--sans)",
+            fontSize: "8px",
+            letterSpacing: "0.3em",
+            textTransform: "uppercase",
+            color: "rgba(201,169,110,0.5)",
+            marginBottom: 2,
+          }}>Our Story</p>
+          <div className="flex items-center gap-1.5 flex-wrap justify-center">
+            <span style={{ fontFamily: "var(--sans)", fontSize: "8.5px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(140,180,220,0.75)" }}>
+              📸 6 Jun
+            </span>
+            <div className="w-1.5 h-px" style={{ background: "rgba(201,169,110,0.3)" }} />
+            <span style={{ fontFamily: "var(--sans)", fontSize: "8.5px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(140,180,220,0.75)" }}>
+              💬 8 Jun
+            </span>
+            <div className="w-1.5 h-px" style={{ background: "rgba(201,169,110,0.3)" }} />
+            <span style={{ fontFamily: "var(--sans)", fontSize: "8.5px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,170,80,0.85)" }}>
+              🙏 9 Jun
+            </span>
+            <div className="w-1.5 h-px" style={{ background: "rgba(201,169,110,0.3)" }} />
+            <span style={{ fontFamily: "var(--sans)", fontSize: "8.5px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(201,169,110,0.7)" }}>
+              🌸 9 Aug
+            </span>
+            <div className="w-1.5 h-px" style={{ background: "rgba(201,169,110,0.3)" }} />
+            <span style={{ fontFamily: "var(--sans)", fontSize: "8.5px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(201,169,110,0.7)" }}>
+              🌹 9 Oct
+            </span>
+            <div className="w-1.5 h-px" style={{ background: "rgba(201,169,110,0.3)" }} />
+            <span style={{ fontFamily: "var(--sans)", fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold-light)", fontWeight: 600 }}>
+              ✨ 18 Oct
+            </span>
+          </div>
         </motion.div>
 
         {/* Special Eyebrow */}

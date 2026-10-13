@@ -17,13 +17,17 @@ export function CountdownScene({ onContinue }: CountdownSceneProps) {
     const t2 = setTimeout(() => setPhase(2), 700);
     const t3 = setTimeout(() => setPhase(3), 1300);
     const t4 = setTimeout(() => setPhase(4), 1900);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
+    const t5 = setTimeout(() => setPhase(5), 2500);
+    const t6 = setTimeout(() => setPhase(6), 3100);
+    const t7 = setTimeout(() => setPhase(7), 3700);
+    const t8 = setTimeout(() => setPhase(8), 4300);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); clearTimeout(t6); clearTimeout(t7); clearTimeout(t8); };
   }, []);
 
   useEffect(() => {
     let triggered = false;
     const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 20 && !triggered && phase >= 3) {
+      if (e.deltaY > 20 && !triggered && phase >= 6) {
         triggered = true;
         onContinue();
       }
@@ -111,21 +115,39 @@ export function CountdownScene({ onContinue }: CountdownSceneProps) {
                     <motion.div
                       className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
                       style={{
-                        background: i === 2
+                        background: i === milestones.length - 1
                           ? "radial-gradient(circle, rgba(180,130,50,0.45) 0%, rgba(30,18,8,0.95) 100%)"
+                          : i === 2
+                          ? "radial-gradient(circle, rgba(200,120,30,0.4) 0%, rgba(18,10,5,0.96) 100%)"
+                          : i === 0 || i === 1
+                          ? "radial-gradient(circle, rgba(40,80,120,0.45) 0%, rgba(8,14,22,0.95) 100%)"
                           : "radial-gradient(circle, rgba(100,20,38,0.5) 0%, rgba(20,8,14,0.95) 100%)",
-                        border: i === 2
+                        border: i === milestones.length - 1
                           ? "1px solid rgba(201,169,110,0.8)"
+                          : i === 2
+                          ? "1px solid rgba(255,170,50,0.65)"
+                          : i === 0 || i === 1
+                          ? "1px solid rgba(100,160,220,0.5)"
                           : "1px solid rgba(201,169,110,0.45)",
-                        boxShadow: i === 2
+                        boxShadow: i === milestones.length - 1
                           ? "0 0 28px rgba(201,169,110,0.3)"
+                          : i === 2
+                          ? "0 0 22px rgba(255,170,50,0.25)"
+                          : i === 0
+                          ? "0 0 16px rgba(100,180,255,0.15)"
                           : "0 0 16px rgba(201,169,110,0.12)",
                       }}
-                      animate={i === 2 ? {
+                      animate={i === milestones.length - 1 ? {
                         boxShadow: [
                           "0 0 28px rgba(201,169,110,0.3)",
                           "0 0 50px rgba(201,169,110,0.55)",
                           "0 0 28px rgba(201,169,110,0.3)",
+                        ]
+                      } : i === 2 ? {
+                        boxShadow: [
+                          "0 0 22px rgba(255,170,50,0.25)",
+                          "0 0 38px rgba(255,170,50,0.45)",
+                          "0 0 22px rgba(255,170,50,0.25)",
                         ]
                       } : {}}
                       transition={{ duration: 2.5, repeat: Infinity }}
@@ -138,10 +160,10 @@ export function CountdownScene({ onContinue }: CountdownSceneProps) {
                       <motion.div
                         style={{
                           width: 1,
-                          height: 52,
+                          height: 28,
                           background: "linear-gradient(to bottom, rgba(201,169,110,0.4), rgba(201,169,110,0.12))",
-                          marginTop: 4,
-                          marginBottom: 4,
+                          marginTop: 3,
+                          marginBottom: 3,
                         }}
                         initial={{ scaleY: 0 }}
                         animate={{ scaleY: 1 }}
@@ -157,17 +179,17 @@ export function CountdownScene({ onContinue }: CountdownSceneProps) {
                       fontSize: "9px",
                       letterSpacing: "0.22em",
                       textTransform: "uppercase",
-                      color: i === 2 ? "var(--gold)" : "rgba(201,169,110,0.65)",
+                      color: i === milestones.length - 1 ? "var(--gold)" : "rgba(201,169,110,0.65)",
                       marginBottom: 3,
                     }}>
                       {milestone.date}
                     </p>
                     <h3 style={{
                       fontFamily: "var(--serif)",
-                      fontSize: "clamp(16px, 4.5vw, 20px)",
-                      fontWeight: i === 2 ? 500 : 400,
-                      color: i === 2 ? "var(--gold-light)" : "var(--cream)",
-                      marginBottom: 4,
+                      fontSize: "clamp(14px, 3.8vw, 18px)",
+                      fontWeight: i === milestones.length - 1 ? 500 : 400,
+                      color: i === milestones.length - 1 ? "var(--gold-light)" : "var(--cream)",
+                      marginBottom: 3,
                       lineHeight: 1.2,
                     }}>
                       {milestone.label}
@@ -175,11 +197,11 @@ export function CountdownScene({ onContinue }: CountdownSceneProps) {
                     <p style={{
                       fontFamily: "var(--serif)",
                       fontStyle: "italic",
-                      fontSize: "clamp(12px, 3.2vw, 14px)",
+                      fontSize: "clamp(11px, 2.9vw, 13px)",
                       color: "rgba(248,243,236,0.42)",
-                      lineHeight: 1.6,
-                      maxWidth: 220,
-                      marginBottom: i < milestones.length - 1 ? 12 : 0,
+                      lineHeight: 1.55,
+                      maxWidth: 210,
+                      marginBottom: i < milestones.length - 1 ? 8 : 0,
                     }}>
                       {milestone.description}
                     </p>
@@ -192,7 +214,7 @@ export function CountdownScene({ onContinue }: CountdownSceneProps) {
 
         {/* CTA */}
         <AnimatePresence>
-          {phase >= 4 && (
+          {phase >= 8 && (
             <motion.button
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
