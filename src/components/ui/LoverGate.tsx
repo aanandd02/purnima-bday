@@ -143,9 +143,9 @@ export function LoverGate({ onUnlock }: LoverGateProps) {
               height: 100,
               borderRadius: "50%",
               background: success
-                ? "radial-gradient(ellipse, rgba(212,175,55,0.25) 0%, transparent 70%)"
-                : "radial-gradient(ellipse, rgba(180,120,255,0.1) 0%, transparent 70%)",
-              filter: "blur(30px)",
+                ? "radial-gradient(ellipse, rgba(212,175,55,0.28) 0%, rgba(212,175,55,0.08) 40%, transparent 70%)"
+                : "radial-gradient(ellipse, rgba(180,120,255,0.15) 0%, rgba(180,120,255,0.04) 40%, transparent 70%)",
+              transform: "translateZ(0)",
               top: -30,
               transition: "background 0.6s",
             }}

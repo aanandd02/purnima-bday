@@ -124,7 +124,14 @@ export const storyConfig = {
     { type: "image" as const, src: "/media/photos/memory-39.jpg", caption: "Here is to you, my forever person.", label: "39" },
   ],
 
-  // ── Videos ───────────────────────────────────────────────
+  // ── Birthday Wish Special Video (Celebration Exclusive) ─
+  birthdayWishVideo: {
+    src: "/media/videos/birthdaywish.mp4",
+    poster: "/media/posters/birthdaywish.jpg",
+    caption: "A special birthday wish, just for you, my love 💖",
+  },
+
+  // ── Videos (Memories Gallery) ─────────────────────────────
   videos: [
     { src: "/media/videos/video-01.mp4", poster: "/media/posters/video-01.jpg", caption: "A moment, captured." },
     { src: "/media/videos/video-02.mp4", poster: "/media/posters/video-02.jpg", caption: "Exactly herself." },
@@ -207,7 +214,7 @@ Having you by my side is the greatest gift of my life. You are my calm, my happi
   // ── Birthday celebration ──────────────────────────────────
   celebration: {
     mainText: "HAPPY BIRTHDAY",
-    name: "PURNIMA",
+    name: "Purnima",
   },
 
   // ── Birthday wishes ───────────────────────────────────────

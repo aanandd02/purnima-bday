@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { storyConfig } from "@/lib/storyConfig";
 import { haptic } from "@/lib/utils";
+import { asset } from "@/lib/assetPath";
 
 interface CelebrationSceneProps {
   onContinue: () => void;
@@ -11,7 +12,9 @@ interface CelebrationSceneProps {
 
 export function CelebrationScene({ onContinue }: CelebrationSceneProps) {
   const confettiStarted = useRef(false);
-  const [showContinue, setShowContinue] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [showVideo, setShowVideo] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const [rainHearts, setRainHearts] = useState<{ id: number; left: number; delay: number; size: number; dur: number }[]>([]);
 
   useEffect(() => {
@@ -25,22 +28,40 @@ export function CelebrationScene({ onContinue }: CelebrationSceneProps) {
     setRainHearts(hearts);
   }, []);
 
+  // Reveal video automatically after 1.8s of birthday celebration fanfare
   useEffect(() => {
-    const t = setTimeout(() => setShowContinue(true), 2200);
+    const t = setTimeout(() => {
+      setShowVideo(true);
+    }, 1800);
     return () => clearTimeout(t);
   }, []);
 
+  // Auto-play video with resilient sound fallback
   useEffect(() => {
-    let triggered = false;
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 20 && !triggered) {
-        triggered = true;
-        onContinue();
+    if (showVideo && videoRef.current) {
+      videoRef.current.currentTime = 0;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // If browser policy blocked unmuted sound, mute and play with tap-to-unmute hint
+          if (videoRef.current) {
+            videoRef.current.muted = true;
+            setIsMuted(true);
+            videoRef.current.play().catch(() => {});
+          }
+        });
       }
-    };
-    window.addEventListener("wheel", handleWheel, { passive: true });
-    return () => window.removeEventListener("wheel", handleWheel);
-  }, [onContinue]);
+    }
+  }, [showVideo]);
+
+  const unmuteVideo = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      setIsMuted(false);
+      videoRef.current.play().catch(() => {});
+    }
+  };
+
 
   useEffect(() => {
     if (confettiStarted.current) return;
@@ -82,11 +103,8 @@ export function CelebrationScene({ onContinue }: CelebrationSceneProps) {
   }, []);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      className="scene overflow-hidden"
+    <div
+      className="scene overflow-y-auto hide-scrollbar relative pb-12"
       style={{
         minHeight: "var(--vh-screen)",
         background: "radial-gradient(ellipse at 50% 40%, #120a14 0%, #09090C 100%)",
@@ -97,7 +115,13 @@ export function CelebrationScene({ onContinue }: CelebrationSceneProps) {
         <motion.div
           key={h.id}
           className="absolute pointer-events-none"
-          style={{ left: `${h.left}%`, top: -40, fontSize: h.size }}
+          style={{
+            left: `${h.left}%`,
+            top: -40,
+            fontSize: h.size,
+            willChange: "transform, opacity",
+            transform: "translateZ(0)",
+          }}
           animate={{ y: ["0vh", "110vh"], opacity: [0, 0.7, 0.7, 0] }}
           transition={{
             duration: h.dur,
@@ -126,113 +150,150 @@ export function CelebrationScene({ onContinue }: CelebrationSceneProps) {
       />
 
       <div
-        className="relative z-10 flex flex-col items-center justify-center gap-4 px-6 text-center"
+        className="relative z-10 flex flex-col items-center justify-center gap-2.5 px-4 pt-6 pb-6 text-center w-full max-w-sm mx-auto"
         style={{ minHeight: "var(--vh-screen)" }}
       >
-        {/* Label */}
-        <motion.p
-          initial={{ opacity: 0, y: 30, letterSpacing: "0.1em" }}
-          animate={{ opacity: 1, y: 0, letterSpacing: "0.3em" }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          style={{
-            fontFamily: "var(--sans)",
-            fontSize: "clamp(11px, 3vw, 13px)",
-            fontWeight: 400,
-            color: "var(--gold)",
-            letterSpacing: "0.3em",
-            textTransform: "uppercase",
-          }}
+        {/* Eyebrow Pill */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-gold/30 bg-gold/5 backdrop-blur-md"
         >
-          {storyConfig.celebration.mainText}
-        </motion.p>
+          <span
+            className="text-[10px] tracking-[0.28em] text-gold uppercase font-medium"
+            style={{ fontFamily: "var(--sans)" }}
+          >
+            ✨ {storyConfig.celebration.mainText} ✨
+          </span>
+        </motion.div>
 
-        {/* Big word */}
+        {/* Elegant Name */}
         <motion.h1
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.4, duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, scale: 0.88, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           style={{
             fontFamily: "var(--serif)",
-            fontSize: "clamp(52px, 16vw, 96px)",
-            fontWeight: 300,
-            color: "var(--cream)",
-            lineHeight: 0.9,
-            letterSpacing: "-0.02em",
+            fontStyle: "italic",
+            fontSize: "clamp(34px, 8.5vw, 48px)",
+            fontWeight: 400,
+            background: "linear-gradient(135deg, #FFF9ED 0%, #F5E6BE 40%, #D4AF37 80%, #C9A96E 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            lineHeight: 1.15,
+            letterSpacing: "0.01em",
+            textShadow: "0 0 25px rgba(212,175,55,0.25)",
           }}
         >
-          {storyConfig.celebration.name}
+          {storyConfig.celebration.name} 🌹
         </motion.h1>
 
-        {/* Divider with heart */}
+        {/* Unified Romantic Divider */}
         <motion.div
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ delay: 0.9, duration: 0.8 }}
-          className="flex items-center gap-3"
+          transition={{ delay: 0.55, duration: 0.8 }}
+          className="flex items-center gap-2 my-0.5"
         >
-          <div className="w-14 h-[1px]" style={{ background: "var(--gold)", transformOrigin: "right" }} />
+          <div className="w-10 h-[1px]" style={{ background: "linear-gradient(90deg, transparent, var(--gold))" }} />
+          <span style={{ color: "var(--gold)", fontSize: 11 }}>✦</span>
           <motion.span
-            animate={{ scale: [1, 1.3, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            style={{ color: "rgba(255,100,150,0.8)", fontSize: 16 }}
+            animate={{ scale: [1, 1.25, 1] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            style={{ color: "#FF6B8B", fontSize: 13 }}
           >
             ♥
           </motion.span>
-          <div className="w-14 h-[1px]" style={{ background: "var(--gold)", transformOrigin: "left" }} />
-        </motion.div>
-
-        {/* Stars decoration */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 1 }}
-          className="flex gap-3"
-        >
-          {["✦", "✧", "✦"].map((s, i) => (
-            <motion.span
-              key={i}
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 2, repeat: Infinity, delay: i * 0.4 }}
-              style={{ color: "var(--gold)", fontSize: 16 }}
-            >
-              {s}
-            </motion.span>
-          ))}
+          <span style={{ color: "var(--gold)", fontSize: 11 }}>✦</span>
+          <div className="w-10 h-[1px]" style={{ background: "linear-gradient(90deg, var(--gold), transparent)" }} />
         </motion.div>
 
         {/* Romantic subtext */}
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6, duration: 1 }}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.9 }}
           style={{
             fontFamily: "var(--serif)",
             fontStyle: "italic",
-            fontSize: "clamp(13px, 3.5vw, 16px)",
-            color: "rgba(255,180,210,0.5)",
-            maxWidth: 260,
-            lineHeight: 1.6,
+            fontSize: "clamp(12px, 3.2vw, 14px)",
+            color: "rgba(255, 220, 230, 0.72)",
+            maxWidth: 290,
+            lineHeight: 1.5,
           }}
         >
-          To the girl who brings all the light into my world. Happy Birthday, my love. 🌹
+          To the girl who brings all the light into my world. Happy Birthday, my love.
         </motion.p>
 
-        {/* Continue */}
+        {/* Birthday Wish Video Presentation (Auto-revealed and played) */}
         <AnimatePresence>
-          {showContinue && (
-            <motion.button
-              className="btn-cinematic mt-4"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={onContinue}
+          {showVideo && (
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full max-w-xs flex flex-col items-center gap-3 my-2"
             >
-              Continue ›
-            </motion.button>
+              {/* Video Container */}
+              <div
+                className="relative w-full rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center"
+                style={{
+                  border: "1.5px solid rgba(212, 175, 55, 0.65)",
+                  boxShadow: "0 12px 35px rgba(0,0,0,0.8), 0 0 25px rgba(212,175,55,0.25)",
+                  background: "#000",
+                  maxHeight: "44vh",
+                  aspectRatio: "9/14",
+                }}
+              >
+                <video
+                  ref={videoRef}
+                  src={asset(storyConfig.birthdayWishVideo.src)}
+                  poster={asset(storyConfig.birthdayWishVideo.poster)}
+                  controls
+                  autoPlay
+                  playsInline
+                  preload="auto"
+                  controlsList="nodownload"
+                  className="w-full h-full object-contain"
+                />
+
+                {/* Resilient Unmute Banner if audio was muted by browser autoplay policy */}
+                {isMuted && (
+                  <button
+                    onClick={unmuteVideo}
+                    className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-sans font-medium flex items-center gap-1.5 cursor-pointer z-20"
+                    style={{
+                      background: "rgba(22, 17, 24, 0.85)",
+                      border: "1px solid rgba(212, 175, 55, 0.7)",
+                      color: "var(--gold-light)",
+                      backdropFilter: "blur(10px)",
+                      boxShadow: "0 4px 15px rgba(0,0,0,0.6)",
+                    }}
+                  >
+                    <span>🔊</span>
+                    <span>Tap for Sound</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Romantic Caption */}
+              <p className="text-[12px] font-serif italic text-cream/80 max-w-[270px] text-center leading-relaxed">
+                {storyConfig.birthdayWishVideo.caption}
+              </p>
+
+              {/* Continue button */}
+              <motion.button
+                className="btn-cinematic w-full mt-1"
+                whileTap={{ scale: 0.96 }}
+                onClick={onContinue}
+              >
+                Continue to Our Story ›
+              </motion.button>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
-    </motion.div>
+    </div>
   );
 }

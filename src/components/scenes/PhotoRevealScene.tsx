@@ -1,5 +1,4 @@
 "use client";
-import { useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { birthdayConfig } from "@/lib/birthdayConfig";
@@ -10,26 +9,11 @@ interface PhotoRevealSceneProps {
 }
 
 export function PhotoRevealScene({ onContinue }: PhotoRevealSceneProps) {
-  useEffect(() => {
-    let triggered = false;
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 30 && !triggered) {
-        triggered = true;
-        onContinue();
-      }
-    };
-    window.addEventListener("wheel", handleWheel, { passive: true });
-    return () => window.removeEventListener("wheel", handleWheel);
-  }, [onContinue]);
 
   return (
-    <motion.div
+    <div
       className="scene relative overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-      style={{ minHeight: "var(--vh-screen)", background: "var(--charcoal)" }}
+      style={{ minHeight: "var(--vh-screen)", background: "var(--charcoal)", overflow: "hidden" }}
     >
       {/* Full-bleed photo */}
       <motion.div
@@ -102,6 +86,6 @@ export function PhotoRevealScene({ onContinue }: PhotoRevealSceneProps) {
 
       {/* Grain & vignette */}
       <div className="absolute inset-0 vignette pointer-events-none" />
-    </motion.div>
+    </div>
   );
 }

@@ -22,8 +22,12 @@ export function ProgressIndicator({ current, total = SCENES, visible }: Progress
           key={i}
           className="progress-dot"
           animate={{ scale: i === current ? 1.5 : 1, opacity: i === current ? 1 : 0.3 }}
-          style={{ background: i === current ? "var(--gold)" : "rgba(245,240,232,0.2)" }}
-          transition={{ duration: 0.4 }}
+          style={{
+            background: i === current ? "var(--gold)" : "rgba(245,240,232,0.2)",
+            willChange: "transform, opacity",
+            transform: "translateZ(0)",
+          }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         />
       ))}
     </div>

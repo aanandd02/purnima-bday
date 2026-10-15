@@ -150,33 +150,48 @@ img, video {
 .text-burgundy { color: var(--burgundy); }
 .text-blush    { color: var(--rose); }
 
-/* ── CTA Button ─────────────────────────────────────────── */
+/* ── CTA Button (Luxury Golden VIP) ──────────────────────── */
 .btn-cinematic {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 36px;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 36px;
   border-radius: 100px;
-  border: 1px solid var(--gold);
-  color: var(--gold);
+  border: 1.5px solid rgba(255, 235, 175, 0.85);
+  color: #120914;
   font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  background: transparent;
+  background: linear-gradient(135deg, #FFF4D9 0%, #ECC568 45%, #C79832 100%);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.55),
+    0 0 25px rgba(212, 175, 55, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
   cursor: pointer;
-  transition: background 0.3s, box-shadow 0.3s;
-  min-height: 50px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, filter 0.25s ease;
+  min-height: 48px;
+  white-space: nowrap;
   -webkit-tap-highlight-color: transparent;
   position: relative;
   overflow: hidden;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.btn-cinematic:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 30px rgba(0, 0, 0, 0.65),
+    0 0 35px rgba(212, 175, 55, 0.65),
+    inset 0 1px 1px rgba(255, 255, 255, 1);
+  filter: brightness(1.04);
 }
 
 .btn-cinematic:active {
-  transform: scale(0.97);
-  background: rgba(201,169,110,0.08);
-  box-shadow: 0 0 30px rgba(201,169,110,0.25);
+  transform: scale(0.96);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 15px rgba(212, 175, 55, 0.3);
 }
 
 /* ── Countdown numbers ──────────────────────────────────── */
@@ -273,4 +288,16 @@ img, video {
     box-shadow: 0 20px 70px rgba(0, 0, 0, 0.85);
     background: var(--bg-warm);
   }
+}
+
+/* ── Hardware Acceleration & Compositor Performance ─────── */
+.gpu-layer {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+h1, h2, h3, p, span, button {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

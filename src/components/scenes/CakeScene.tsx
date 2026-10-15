@@ -107,20 +107,17 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1.2 }}
+    <div
       className="scene overflow-hidden relative"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{
         minHeight: "var(--vh-screen)",
         background: "radial-gradient(ellipse at 50% 40%, #151218 0%, #08080b 100%)",
+        overflow: "hidden",
       }}
     >
-      {/* Warm Ambient Glow from candles */}
+      {/* Warm Ambient Glow from candles - precomputed multi-stop radial gradient without blur filter */}
       <motion.div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         animate={{
@@ -137,8 +134,9 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
           height: 440,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(255,180,60,0.3) 0%, rgba(212,140,40,0.12) 45%, transparent 70%)",
-          filter: "blur(60px)",
+            "radial-gradient(circle, rgba(255,180,60,0.35) 0%, rgba(212,140,40,0.15) 35%, rgba(212,140,40,0.04) 55%, transparent 70%)",
+          transform: "translateZ(0)",
+          willChange: "transform, opacity",
         }}
       />
 
@@ -346,13 +344,6 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
                   handleMicOrTap();
                   blowCandles();
                 }}
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(28, 18, 29, 0.9) 0%, rgba(17, 11, 18, 0.95) 100%)",
-                  border: "1px solid rgba(212, 175, 55, 0.5)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,0.7), 0 0 20px rgba(212,175,55,0.2)",
-                  color: "var(--gold-light)",
-                }}
               >
                 {listening ? "Blow now… 🎤" : "Tap to blow the candles ✨"}
               </motion.button>
@@ -395,6 +386,6 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
           )}
         </AnimatePresence>
       </div>
-    </motion.div>
+    </div>
   );
 }

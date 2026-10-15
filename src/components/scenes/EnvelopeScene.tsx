@@ -21,15 +21,12 @@ export function EnvelopeScene({ onContinue }: EnvelopeSceneProps) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1 }}
+    <div
       className="w-full flex flex-col items-center justify-center relative overflow-y-auto hide-scrollbar"
       style={{
         minHeight: "var(--vh-screen)",
         background: "var(--charcoal)",
+        overflow: "hidden",
       }}
     >
       <AnimatePresence mode="wait">
@@ -40,8 +37,9 @@ export function EnvelopeScene({ onContinue }: EnvelopeSceneProps) {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col items-center justify-center gap-8 w-full px-6 py-10 my-auto"
+            style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
           >
             <p
               style={{
@@ -65,12 +63,12 @@ export function EnvelopeScene({ onContinue }: EnvelopeSceneProps) {
               aria-label="Open letter"
               style={{ background: "none", border: "none" }}
             >
-              {/* Glow */}
+              {/* Glow without blur filter */}
               <div
-                className="absolute inset-0 -m-6 rounded-full"
+                className="absolute inset-0 -m-6 rounded-full pointer-events-none"
                 style={{
-                  background: "radial-gradient(circle, rgba(201,169,110,0.15) 0%, transparent 70%)",
-                  filter: "blur(20px)",
+                  background: "radial-gradient(circle, rgba(201,169,110,0.22) 0%, rgba(201,169,110,0.06) 40%, transparent 70%)",
+                  transform: "translateZ(0)",
                 }}
               />
 
@@ -227,16 +225,6 @@ export function EnvelopeScene({ onContinue }: EnvelopeSceneProps) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                style={{
-                  backdropFilter: "blur(18px)",
-                  WebkitBackdropFilter: "blur(18px)",
-                  background:
-                    "linear-gradient(135deg, rgba(28, 18, 29, 0.88) 0%, rgba(17, 11, 18, 0.94) 100%)",
-                  border: "1px solid rgba(212, 175, 55, 0.45)",
-                  boxShadow:
-                    "0 10px 30px rgba(0,0,0,0.7), 0 0 20px rgba(212,175,55,0.18)",
-                  color: "var(--gold-light)",
-                }}
               >
                 Continue ›
               </motion.button>
@@ -244,6 +232,6 @@ export function EnvelopeScene({ onContinue }: EnvelopeSceneProps) {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }

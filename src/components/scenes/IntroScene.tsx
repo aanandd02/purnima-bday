@@ -10,6 +10,8 @@ interface IntroSceneProps {
   onBegin: () => void;
 }
 
+const LUXURY_EASE = [0.16, 1, 0.3, 1] as const;
+
 // Subtle ambient particle
 function Particle({ i }: { i: number }) {
   const size = 2 + (i % 3);
@@ -20,7 +22,13 @@ function Particle({ i }: { i: number }) {
   return (
     <motion.div
       className="absolute pointer-events-none select-none"
-      style={{ left, bottom: "-5%", fontSize: isHeart ? 11 : size }}
+      style={{
+        left,
+        bottom: "-5%",
+        fontSize: isHeart ? 11 : size,
+        willChange: "transform, opacity",
+        transform: "translateZ(0)",
+      }}
       animate={{ y: [0, -(190 + (i % 100))], opacity: [0, 0.7, 0] }}
       transition={{
         duration: dur,
@@ -41,8 +49,8 @@ const containerVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.18,
-      delayChildren: 0.2,
+      staggerChildren: 0.16,
+      delayChildren: 0.15,
     },
   },
 };
@@ -53,8 +61,8 @@ const itemVariants: Variants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 1.1,
-      ease: [0.16, 1, 0.3, 1] as const,
+      duration: 1.0,
+      ease: LUXURY_EASE,
     },
   },
 };
@@ -71,17 +79,7 @@ export function IntroScene({ onBegin }: IntroSceneProps) {
     setTimeout(onBegin, 800);
   }, [tapped, onBegin]);
 
-  useEffect(() => {
-    let triggered = false;
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 20 && !triggered && !easterEgg) {
-        triggered = true;
-        handleBegin();
-      }
-    };
-    window.addEventListener("wheel", handleWheel, { passive: true });
-    return () => window.removeEventListener("wheel", handleWheel);
-  }, [easterEgg, handleBegin]);
+
 
   const startLongPress = () => {
     longPressTimer.current = setTimeout(() => setEasterEgg(true), 1200);

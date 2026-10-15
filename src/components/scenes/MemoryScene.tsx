@@ -21,11 +21,7 @@ export function MemoryScene({ onContinue }: MemorySceneProps) {
 
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.8 }}
+      <div
         className="w-full relative min-h-screen"
         style={{
           background: "var(--charcoal)",
@@ -167,16 +163,6 @@ export function MemoryScene({ onContinue }: MemorySceneProps) {
             className="btn-cinematic"
             whileTap={{ scale: 0.96 }}
             onClick={onContinue}
-            style={{
-              backdropFilter: "blur(18px)",
-              WebkitBackdropFilter: "blur(18px)",
-              background:
-                "linear-gradient(135deg, rgba(28, 18, 29, 0.92) 0%, rgba(17, 11, 18, 0.96) 100%)",
-              border: "1px solid rgba(212, 175, 55, 0.45)",
-              boxShadow:
-                "0 12px 35px rgba(0,0,0,0.7), 0 0 25px rgba(212,175,55,0.18)",
-              color: "var(--gold-light)",
-            }}
           >
             Continue to Videos ›
           </motion.button>
@@ -184,7 +170,7 @@ export function MemoryScene({ onContinue }: MemorySceneProps) {
             Moving memories await next
           </p>
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Fullscreen Interactive Photo & Caption Viewer */}
       {viewerIndex !== null && (

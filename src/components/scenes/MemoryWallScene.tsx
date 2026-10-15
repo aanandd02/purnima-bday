@@ -131,11 +131,7 @@ export function MemoryWallScene({ onContinue }: MemoryWallSceneProps) {
 
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 1 }}
+      <div
         className="w-full relative"
         style={{
           background: "var(--charcoal)",
@@ -262,7 +258,7 @@ export function MemoryWallScene({ onContinue }: MemoryWallSceneProps) {
             Finish the experience ›
           </motion.button>
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Viewer */}
       <AnimatePresence>

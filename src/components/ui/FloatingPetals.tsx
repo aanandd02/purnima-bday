@@ -26,26 +26,30 @@ export function FloatingPetals() {
       style.id = styleId;
       style.textContent = `
         @keyframes petalFall {
-          0%   { transform: translateY(-60px) translateX(0px) rotate(0deg);   opacity: 0; }
+          0%   { transform: translate3d(0, -60px, 0) rotate(0deg); opacity: 0; }
           8%   { opacity: 1; }
           90%  { opacity: 0.7; }
-          100% { transform: translateY(110vh) translateX(var(--drift)) rotate(var(--spin)); opacity: 0; }
+          100% { transform: translate3d(var(--drift), 110vh, 0) rotate(var(--spin)); opacity: 0; }
         }
         @keyframes sparklePulse {
-          0%, 100% { transform: scale(0.4) rotate(0deg);   opacity: 0; }
-          30%       { transform: scale(1)   rotate(45deg);  opacity: 0.85; }
-          60%       { transform: scale(0.6) rotate(90deg);  opacity: 0.4; }
+          0%, 100% { transform: translate3d(0, 0, 0) scale(0.4) rotate(0deg); opacity: 0; }
+          30%       { transform: translate3d(0, 0, 0) scale(1) rotate(45deg); opacity: 0.85; }
+          60%       { transform: translate3d(0, 0, 0) scale(0.6) rotate(90deg); opacity: 0.4; }
         }
         .fp-petal {
           position: fixed;
           pointer-events: none;
           will-change: transform, opacity;
+          transform: translateZ(0);
+          backface-visibility: hidden;
           animation: petalFall linear infinite;
         }
         .fp-sparkle {
           position: fixed;
           pointer-events: none;
           will-change: transform, opacity;
+          transform: translateZ(0);
+          backface-visibility: hidden;
           animation: sparklePulse ease-in-out infinite;
         }
       `;
@@ -88,8 +92,8 @@ export function FloatingPetals() {
         z-index: 5;
       `;
 
-      // SVG petal
-      el.innerHTML = `<svg viewBox="0 0 24 26" width="${size}" height="${size * 1.3}" xmlns="http://www.w3.org/2000/svg" style="filter:blur(0.3px)"><path d="${petalPath}" fill="${color}"/></svg>`;
+      // SVG petal without blur filter overhead
+      el.innerHTML = `<svg viewBox="0 0 24 26" width="${size}" height="${size * 1.3}" xmlns="http://www.w3.org/2000/svg"><path d="${petalPath}" fill="${color}"/></svg>`;
 
       container.appendChild(el);
       elements.push(el);
@@ -141,6 +145,7 @@ export function FloatingPetals() {
         zIndex: 5,
         pointerEvents: "none",
         overflow: "hidden",
+        transform: "translateZ(0)",
       }}
     />
   );

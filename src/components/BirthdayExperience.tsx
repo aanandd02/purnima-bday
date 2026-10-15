@@ -1,6 +1,6 @@
 "use client";
 import { useState, useCallback } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 
 import { LoadingScene }         from "@/components/scenes/LoadingScene";
 import { IntroScene }           from "@/components/scenes/IntroScene";
@@ -15,12 +15,10 @@ import { CakeScene }            from "@/components/scenes/CakeScene";
 import { CelebrationScene }     from "@/components/scenes/CelebrationScene";
 import { WishSequenceScene }    from "@/components/scenes/WishSequenceScene";
 import { YearAheadScene }       from "@/components/scenes/YearAheadScene";
-import { MemoryWallScene }      from "@/components/scenes/MemoryWallScene";
 import { FinalScene }           from "@/components/scenes/FinalScene";
 
 import { ProgressIndicator }    from "@/components/ui/ProgressIndicator";
 import { FloatingPetals }       from "@/components/ui/FloatingPetals";
-import { LoverGate }            from "@/components/ui/LoverGate";
 
 // ── Scene order ───────────────────────────────────────────
 type Scene =
@@ -37,7 +35,6 @@ type Scene =
   | "celebration"
   | "wishes"
   | "yearAhead"
-  | "memoryWall"
   | "final";
 
 const SCENE_ORDER: Scene[] = [
@@ -54,7 +51,6 @@ const SCENE_ORDER: Scene[] = [
   "celebration",
   "wishes",
   "yearAhead",
-  "memoryWall",
   "final",
 ];
 
@@ -63,13 +59,26 @@ const PROGRESS_SCENES: Scene[] = SCENE_ORDER.filter(
   (s) => s !== "loading" && s !== "intro"
 );
 
+const sceneVariants: Variants = {
+  initial: { opacity: 0, scale: 0.98, y: 8 },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
+  },
+  exit: {
+    opacity: 0,
+    scale: 1.01,
+    y: -8,
+    transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
+
 // ── Main component ────────────────────────────────────────
 export default function BirthdayExperience() {
   const [scene, setScene] = useState<Scene>("loading");
   const [key, setKey] = useState(0); // for replay
-  // LoverGate — blocks scene skip with secret question
-  const [gateOpen, setGateOpen] = useState(false);
-  const [pendingNext, setPendingNext] = useState<(() => void) | null>(null);
 
   const goTo = useCallback((s: Scene) => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -82,24 +91,6 @@ export default function BirthdayExperience() {
       goTo(SCENE_ORDER[currentIdx + 1]);
     }
   }, [scene, goTo]);
-
-  // Gate-protected next — used on scenes where skipping should be locked
-  const nextWithGate = useCallback(() => {
-    const currentIdx = SCENE_ORDER.indexOf(scene);
-    if (currentIdx < SCENE_ORDER.length - 1) {
-      const targetScene = SCENE_ORDER[currentIdx + 1];
-      setPendingNext(() => () => goTo(targetScene));
-      setGateOpen(true);
-    }
-  }, [scene, goTo]);
-
-  const handleGateUnlock = useCallback(() => {
-    setGateOpen(false);
-    if (pendingNext) {
-      pendingNext();
-      setPendingNext(null);
-    }
-  }, [pendingNext]);
 
   const handleBegin = useCallback(() => {
     next();
@@ -128,88 +119,29 @@ export default function BirthdayExperience() {
 
       {/* Scenes */}
       <AnimatePresence mode="wait">
-        {scene === "loading" && (
-          <motion.div key="loading">
-            <LoadingScene onComplete={() => goTo("intro")} />
-          </motion.div>
-        )}
-        {scene === "intro" && (
-          <motion.div key="intro">
-            <IntroScene onBegin={handleBegin} />
-          </motion.div>
-        )}
-        {scene === "countdown" && (
-          <motion.div key="countdown">
-            <CountdownScene onContinue={nextWithGate} />
-          </motion.div>
-        )}
-        {scene === "photoReveal" && (
-          <motion.div key="photoReveal">
-            <PhotoRevealScene onContinue={next} />
-          </motion.div>
-        )}
-        {scene === "memory" && (
-          <motion.div key="memory">
-            <MemoryScene onContinue={next} />
-          </motion.div>
-        )}
-        {scene === "video" && (
-          <motion.div key="video">
-            <VideoScene onContinue={next} />
-          </motion.div>
-        )}
-        {scene === "reasons" && (
-          <motion.div key="reasons">
-            <ReasonsScene onContinue={next} />
-          </motion.div>
-        )}
-        {scene === "envelope" && (
-          <motion.div key="envelope">
-            <EnvelopeScene onContinue={next} />
-          </motion.div>
-        )}
-        {scene === "cakeTransition" && (
-          <motion.div key="cakeTransition">
-            <CakeTransitionScene onContinue={next} />
-          </motion.div>
-        )}
-        {scene === "cake" && (
-          <motion.div key="cake">
-            <CakeScene onBlown={next} audioEnabled={false} />
-          </motion.div>
-        )}
-        {scene === "celebration" && (
-          <motion.div key="celebration">
-            <CelebrationScene onContinue={next} audioEnabled={false} />
-          </motion.div>
-        )}
-        {scene === "wishes" && (
-          <motion.div key="wishes">
-            <WishSequenceScene onContinue={next} />
-          </motion.div>
-        )}
-        {scene === "yearAhead" && (
-          <motion.div key="yearAhead">
-            <YearAheadScene onContinue={next} />
-          </motion.div>
-        )}
-        {scene === "memoryWall" && (
-          <motion.div key="memoryWall">
-            <MemoryWallScene onContinue={next} />
-          </motion.div>
-        )}
-        {scene === "final" && (
-          <motion.div key="final">
-            <FinalScene onReplay={handleReplay} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Lover Gate */}
-      <AnimatePresence>
-        {gateOpen && (
-          <LoverGate onUnlock={handleGateUnlock} />
-        )}
+        <motion.div
+          key={scene}
+          variants={sceneVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          className="w-full relative"
+        >
+          {scene === "loading" && <LoadingScene onComplete={() => goTo("intro")} />}
+          {scene === "intro" && <IntroScene onBegin={handleBegin} />}
+          {scene === "countdown" && <CountdownScene onContinue={next} />}
+          {scene === "photoReveal" && <PhotoRevealScene onContinue={next} />}
+          {scene === "memory" && <MemoryScene onContinue={next} />}
+          {scene === "video" && <VideoScene onContinue={next} />}
+          {scene === "reasons" && <ReasonsScene onContinue={next} />}
+          {scene === "envelope" && <EnvelopeScene onContinue={next} />}
+          {scene === "cakeTransition" && <CakeTransitionScene onContinue={next} />}
+          {scene === "cake" && <CakeScene onBlown={next} audioEnabled={false} />}
+          {scene === "celebration" && <CelebrationScene onContinue={next} audioEnabled={false} />}
+          {scene === "wishes" && <WishSequenceScene onContinue={next} />}
+          {scene === "yearAhead" && <YearAheadScene onContinue={next} />}
+          {scene === "final" && <FinalScene onReplay={handleReplay} />}
+        </motion.div>
       </AnimatePresence>
     </div>
   );

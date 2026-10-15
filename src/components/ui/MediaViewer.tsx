@@ -1,5 +1,6 @@
 "use client";
 import { useState, useCallback, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { asset } from "@/lib/assetPath";
@@ -13,8 +14,18 @@ interface MediaViewerProps {
 export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) {
   const [index, setIndex] = useState(initialIndex);
   const [direction, setDirection] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
+
+  useEffect(() => {
+    setMounted(true);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
 
   const item = items[index];
 
@@ -46,23 +57,26 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
   const handleTouchEnd = (e: React.TouchEvent) => {
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
-    // Horizontal swipe threshold
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
       go(dx < 0 ? 1 : -1);
     }
   };
 
-  return (
+  if (!mounted || !item) return null;
+
+  return createPortal(
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="fixed inset-0 z-[120] flex flex-col items-center justify-between overflow-hidden select-none"
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-between select-none"
       style={{
-        background: "rgba(8, 6, 11, 0.97)",
+        background: "rgba(8, 6, 11, 0.98)",
         backdropFilter: "blur(24px)",
         WebkitBackdropFilter: "blur(24px)",
+        height: "100dvh",
+        width: "100vw",
       }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -76,6 +90,7 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
             alt=""
             fill
             className="object-cover scale-125 blur-3xl opacity-25 brightness-75 transition-opacity duration-700"
+            unoptimized
           />
         </div>
       )}
@@ -87,16 +102,19 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
       >
         {/* Pill counter */}
         <div
-          className="px-3 py-1 rounded-full text-[11px] tracking-widest uppercase font-medium flex items-center gap-1.5"
+          className="px-3.5 py-1.5 rounded-full text-[11px] tracking-widest uppercase font-medium flex items-center gap-1.5"
           style={{
-            background: "rgba(22, 17, 24, 0.75)",
+            background: "rgba(22, 17, 24, 0.85)",
             backdropFilter: "blur(12px)",
-            border: "1px solid rgba(212, 175, 55, 0.35)",
+            border: "1px solid rgba(212, 175, 55, 0.4)",
             color: "var(--gold-light)",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
           }}
         >
           <span className="text-[10px] text-gold/60">✦</span>
-          <span>{item.type === "video" ? "Video" : "Memory"} {index + 1} of {items.length}</span>
+          <span>
+            {item.type === "video" ? "Video" : "Memory"} {index + 1} of {items.length}
+          </span>
         </div>
 
         {/* Close Button */}
@@ -106,10 +124,10 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
           aria-label="Close viewer"
           className="w-10 h-10 rounded-full flex items-center justify-center text-cream/70 hover:text-cream transition-colors cursor-pointer"
           style={{
-            background: "rgba(22, 17, 24, 0.75)",
+            background: "rgba(22, 17, 24, 0.85)",
             backdropFilter: "blur(12px)",
-            border: "1px solid rgba(212, 175, 55, 0.35)",
-            boxShadow: "0 4px 15px rgba(0,0,0,0.4)",
+            border: "1px solid rgba(212, 175, 55, 0.4)",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
           }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -119,7 +137,7 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
       </div>
 
       {/* Center Stage: The Media */}
-      <div className="relative z-10 w-full flex-1 flex items-center justify-center px-3 min-h-0">
+      <div className="relative z-10 w-full flex-1 flex items-center justify-center px-4 py-2 min-h-0 overflow-hidden">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={index}
@@ -128,7 +146,7 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: direction * -50, scale: 0.97 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full h-full max-h-[62dvh] max-w-md flex items-center justify-center relative"
+            className="w-full h-full flex items-center justify-center relative"
           >
             {item.type === "video" ? (
               <video
@@ -137,14 +155,20 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
                 controls
                 autoPlay
                 playsInline
-                className="max-h-full max-w-full rounded-2xl object-contain shadow-2xl"
+                preload="metadata"
+                controlsList="nodownload"
+                className="max-h-[58vh] max-w-full rounded-2xl object-contain shadow-2xl"
                 style={{
-                  border: "1px solid rgba(212, 175, 55, 0.25)",
-                  boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
+                  border: "1px solid rgba(212, 175, 55, 0.35)",
+                  boxShadow: "0 20px 50px rgba(0,0,0,0.85)",
+                  backgroundColor: "#000",
                 }}
               />
             ) : (
-              <div className="relative w-full h-full flex items-center justify-center">
+              <div
+                className="relative w-full h-[58vh] max-h-[560px] max-w-md flex items-center justify-center"
+                style={{ willChange: "transform", transform: "translateZ(0)" }}
+              >
                 <Image
                   src={asset(item.src)}
                   alt={item.caption || "Memory"}
@@ -155,6 +179,7 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
                   style={{
                     filter: "drop-shadow(0 15px 35px rgba(0,0,0,0.8))",
                   }}
+                  unoptimized
                 />
               </div>
             )}
@@ -162,39 +187,41 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
         </AnimatePresence>
 
         {/* Desktop Side Chevron Arrows */}
-        <div className="hidden md:flex absolute inset-x-4 top-1/2 -translate-y-1/2 justify-between pointer-events-none">
+        <div className="hidden md:flex absolute inset-x-8 top-1/2 -translate-y-1/2 justify-between pointer-events-none">
           <button
             onClick={() => go(-1)}
             disabled={index === 0}
-            className="w-11 h-11 rounded-full flex items-center justify-center pointer-events-auto transition-all disabled:opacity-20 disabled:pointer-events-none cursor-pointer"
+            className="w-12 h-12 rounded-full flex items-center justify-center pointer-events-auto transition-all disabled:opacity-20 disabled:pointer-events-none cursor-pointer"
             style={{
-              background: "rgba(22, 17, 24, 0.8)",
+              background: "rgba(22, 17, 24, 0.85)",
               border: "1px solid rgba(212, 175, 55, 0.4)",
               color: "var(--gold-light)",
+              boxShadow: "0 6px 20px rgba(0,0,0,0.6)",
             }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M15 18l-6-6 6-6" />
             </svg>
           </button>
           <button
             onClick={() => go(1)}
             disabled={index === items.length - 1}
-            className="w-11 h-11 rounded-full flex items-center justify-center pointer-events-auto transition-all disabled:opacity-20 disabled:pointer-events-none cursor-pointer"
+            className="w-12 h-12 rounded-full flex items-center justify-center pointer-events-auto transition-all disabled:opacity-20 disabled:pointer-events-none cursor-pointer"
             style={{
-              background: "rgba(22, 17, 24, 0.8)",
+              background: "rgba(22, 17, 24, 0.85)",
               border: "1px solid rgba(212, 175, 55, 0.4)",
               color: "var(--gold-light)",
+              boxShadow: "0 6px 20px rgba(0,0,0,0.6)",
             }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M9 18l6-6-6-6" />
             </svg>
           </button>
         </div>
       </div>
 
-      {/* Bottom Drawer: Prominent Caption & Mobile Navigation Pills */}
+      {/* Bottom Drawer: Prominent Caption & Navigation Pills */}
       <div
         className="relative z-20 w-full max-w-md mx-auto px-4 pt-2 pb-5 flex flex-col gap-3"
         style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
@@ -208,7 +235,7 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
             transition={{ duration: 0.25 }}
             className="px-5 py-3 rounded-2xl text-center"
             style={{
-              background: "linear-gradient(135deg, rgba(26, 19, 29, 0.92) 0%, rgba(16, 12, 18, 0.95) 100%)",
+              background: "linear-gradient(135deg, rgba(26, 19, 29, 0.94) 0%, rgba(16, 12, 18, 0.97) 100%)",
               backdropFilter: "blur(20px)",
               WebkitBackdropFilter: "blur(20px)",
               border: "1px solid rgba(212, 175, 55, 0.35)",
@@ -235,7 +262,7 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
             disabled={index === 0}
             className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition-all disabled:opacity-20 disabled:pointer-events-none cursor-pointer"
             style={{
-              background: "rgba(22, 17, 24, 0.8)",
+              background: "rgba(22, 17, 24, 0.85)",
               border: "1px solid rgba(212, 175, 55, 0.3)",
               color: "var(--gold-light)",
             }}
@@ -254,7 +281,7 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
             disabled={index === items.length - 1}
             className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition-all disabled:opacity-20 disabled:pointer-events-none cursor-pointer"
             style={{
-              background: "rgba(22, 17, 24, 0.8)",
+              background: "rgba(22, 17, 24, 0.85)",
               border: "1px solid rgba(212, 175, 55, 0.3)",
               color: "var(--gold-light)",
             }}
@@ -264,6 +291,7 @@ export function MediaViewer({ items, initialIndex, onClose }: MediaViewerProps) 
           </motion.button>
         </div>
       </div>
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }

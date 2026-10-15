@@ -1,11 +1,13 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { birthdayConfig } from "@/lib/birthdayConfig";
 
 interface WishSequenceSceneProps {
   onContinue: () => void;
 }
+
+const LUXURY_EASE = [0.16, 1, 0.3, 1] as const;
 
 export function WishSequenceScene({ onContinue }: WishSequenceSceneProps) {
   const [index, setIndex] = useState(0);
@@ -20,51 +22,37 @@ export function WishSequenceScene({ onContinue }: WishSequenceSceneProps) {
     }
   };
 
-  // NO auto-timer: Purnima controls the pace
-
-  // Scroll to advance manually
-  useEffect(() => {
-    let lastWheel = 0;
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 20 && Date.now() - lastWheel > 500) {
-        lastWheel = Date.now();
-        if (done) {
-          onContinue();
-        } else {
-          advance();
-        }
-      }
-    };
-    window.addEventListener("wheel", handleWheel, { passive: true });
-    return () => window.removeEventListener("wheel", handleWheel);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [done, index, wishes.length, onContinue]);
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1 }}
-      className="scene cursor-pointer select-none"
+    <div
+      className={`scene select-none relative ${!done ? "cursor-pointer" : ""}`}
       onClick={() => {
-        if (done) onContinue();
-        else advance();
+        if (!done) advance();
       }}
       style={{
         minHeight: "var(--vh-screen)",
         background: "var(--charcoal)",
+        overflow: "hidden",
       }}
     >
-      <div className="relative z-10 flex flex-col items-center justify-center px-6 py-10 text-center w-full max-w-sm my-auto" style={{ minHeight: "var(--vh-screen)" }}>
+      <div
+        className="relative z-10 flex flex-col items-center justify-center px-6 py-10 text-center w-full max-w-sm my-auto mx-auto"
+        style={{ minHeight: "var(--vh-screen)" }}
+      >
         {!done ? (
           <AnimatePresence mode="wait">
             <motion.p
               key={index}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.65, ease: LUXURY_EASE },
+              }}
+              exit={{
+                opacity: 0,
+                y: -12,
+                transition: { duration: 0.35, ease: LUXURY_EASE },
+              }}
               style={{
                 fontFamily: "var(--serif)",
                 fontStyle: "italic",
@@ -74,6 +62,8 @@ export function WishSequenceScene({ onContinue }: WishSequenceSceneProps) {
                 textShadow: "0 2px 25px rgba(255,255,255,0.15), 0 0 15px rgba(212,175,55,0.3)",
                 lineHeight: 1.35,
                 maxWidth: 320,
+                willChange: "transform, opacity",
+                transform: "translateZ(0)",
               }}
             >
               {wishes[index]}
@@ -83,8 +73,9 @@ export function WishSequenceScene({ onContinue }: WishSequenceSceneProps) {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, ease: LUXURY_EASE }}
             className="flex flex-col items-center gap-5"
+            style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
           >
             <p
               style={{
@@ -123,6 +114,8 @@ export function WishSequenceScene({ onContinue }: WishSequenceSceneProps) {
                 letterSpacing: "0.18em",
                 textTransform: "uppercase",
                 color: "rgba(212,175,55,0.6)",
+                willChange: "opacity",
+                transform: "translateZ(0)",
               }}
             >
               tap to continue
@@ -145,6 +138,6 @@ export function WishSequenceScene({ onContinue }: WishSequenceSceneProps) {
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }
