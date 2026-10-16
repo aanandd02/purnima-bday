@@ -8,8 +8,8 @@ interface ReasonsSceneProps {
   onContinue: () => void;
 }
 
-// Romantic icons for each reason
-const REASON_ICONS = ["🌹", "✨", "🎵", "💛", "🌙", "😂", "🤍", "♾️"];
+// Romantic icons for each reason (9 reasons matching our lucky number 9)
+const REASON_ICONS = ["🌹", "✨", "🎵", "💛", "🌙", "😂", "💌", "♾️", "💖"];
 
 const LUXURY_EASE = [0.16, 1, 0.3, 1] as const;
 

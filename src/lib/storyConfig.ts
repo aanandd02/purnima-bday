@@ -16,6 +16,7 @@ export const storyConfig = {
     mannat: "2026-06-09",          // 9 June 2026 — mannat at Bade Hanuman Ji
     firstMeet: "2026-08-09",       // 9 August 2026 — first real meeting
     familyApproval: "2026-10-09",  // 9 October 2026 — families said yes
+    firstILoveYou: "2026-10-17 01:51", // 17 October 2026, 1:51 AM — Purnima said "I Love You" ❤️
   },
 
   heroPhoto: "/media/photos/hero-01.jpg",
@@ -64,6 +65,12 @@ export const storyConfig = {
         icon: "🌹",
         label: "Our Families Said Yes",
         description: "On 9 October, both our families gave their blessings to what our hearts had already chosen long before 🌹💍",
+      },
+      {
+        date: "17 October 2026",
+        icon: "💖",
+        label: "Words From The Heart",
+        description: "On 17 October at 1:51 AM, in the quiet stillness just before your birthday, words spoken straight from the heart made our bond even more special and complete. A precious moment of pure warmth, trust, and a lifelong promise to cherish each other forever ❤️✨",
       },
       {
         date: "18 October 2026",
@@ -180,6 +187,10 @@ export const storyConfig = {
       title: "You Are Going To Be Mine 💍",
       message: "Knowing that the entire rest of this life will be spent with you, through every chapter, every turn, always, that feeling is everything to me ❤️",
     },
+    {
+      title: "Words From The Heart 💖",
+      message: "17 October, 1:51 AM. In the quiet stillness of the night, words spoken straight from your heart made time completely stop. That moment of pure honesty, warmth, and love is one of the most precious gifts of my life 🥰💍",
+    },
   ],
 
   // ── A Letter From My Heart ────────────────────────────────
@@ -198,6 +209,8 @@ And then, on 9 August, I finally saw you in person. That moment confirmed everyt
 Your smile is my absolute favourite thing in this world, it melts away every single worry. But even more than your beauty, it is your sweet and caring heart that won me over completely. The way you care, the honesty in your eyes, you do not even realise how special you truly are ❤️.
 
 And then came 9 October. That unforgettable day when both our families happily said yes to our relationship! In that moment, knowing that you and I are going to share an entire lifetime together, I felt like the luckiest person in the world 🌹💍.
+
+And then, on 17 October at 1:51 AM... in the quiet stillness of the night right before your birthday, you gave me the most magical moment of my entire life — when you spoke straight from your heart and expressed how much I mean to you. In that single breath, my whole world stopped. My heart raced, and I felt a warmth and happiness so deep that words can never capture it. That beautiful moment and your pure feelings are etched into my soul for eternity ❤️💫.
 
 Having you by my side is the greatest gift of my life. You are my calm, my happiness, and my forever. I promise to always cherish you, protect your smile, and love you with all my heart through every single chapter of our lives ❤️✨.`,
     closing: "Forever and always yours,",

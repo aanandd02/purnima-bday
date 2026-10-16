@@ -149,6 +149,10 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
               🌹 9 Oct
             </span>
             <div className="w-1.5 h-px" style={{ background: "rgba(201,169,110,0.3)" }} />
+            <span style={{ fontFamily: "var(--sans)", fontSize: "8.5px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,130,175,0.95)", fontWeight: 600 }}>
+              💖 17 Oct
+            </span>
+            <div className="w-1.5 h-px" style={{ background: "rgba(201,169,110,0.3)" }} />
             <span style={{ fontFamily: "var(--sans)", fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold-light)", fontWeight: 600 }}>
               ✨ 18 Oct
             </span>
