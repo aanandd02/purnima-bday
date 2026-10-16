@@ -217,6 +217,17 @@ Having you by my side is the greatest gift of my life. You are my calm, my happi
     name: "Purnima",
   },
 
+  // ── Papa's Blessing (Dedicated, deeply emotional sacred scene) ─
+  papaBlessing: {
+    badge: "Papa's Blessing 🕊️",
+    line1: "Kaha jata hai jo hume sabse zyada pyaar karte hain, wo kabhi hume chhodkar nahi jaate...",
+    line2: "Aaj aapke janamdin par, ek bohot hi khaas aashirwaad aapke liye... 🕊️🤍",
+    videoSrc: "/media/videos/papa-wish.mp4",
+    fallbackVideoSrc: "/media/videos/papa.mp4",
+    note: "Wo hamesha aapko aashirwaad de rahe hain. Aur main waada karta hoon, unki tarah hamesha aapki hifazat karunga aur aapko bepanah pyaar dunga ❤️",
+    cta: "A Sky Full of Stars ✨",
+  },
+
   // ── Birthday wishes ───────────────────────────────────────
   wishes: [
     "A life full of joy and laughter.",

@@ -13,6 +13,7 @@ import { EnvelopeScene }        from "@/components/scenes/EnvelopeScene";
 import { CakeTransitionScene }  from "@/components/scenes/CakeTransitionScene";
 import { CakeScene }            from "@/components/scenes/CakeScene";
 import { CelebrationScene }     from "@/components/scenes/CelebrationScene";
+import { PapaBlessingScene }    from "@/components/scenes/PapaBlessingScene";
 import { WishSequenceScene }    from "@/components/scenes/WishSequenceScene";
 import { YearAheadScene }       from "@/components/scenes/YearAheadScene";
 import { FinalScene }           from "@/components/scenes/FinalScene";
@@ -34,6 +35,7 @@ type Scene =
   | "cakeTransition"
   | "cake"
   | "celebration"
+  | "papaBlessing"
   | "wishes"
   | "yearAhead"
   | "final";
@@ -50,6 +52,7 @@ const SCENE_ORDER: Scene[] = [
   "cakeTransition",
   "cake",
   "celebration",
+  "papaBlessing",
   "wishes",
   "yearAhead",
   "final",
@@ -247,6 +250,7 @@ export default function BirthdayExperience() {
           {scene === "cakeTransition" && <CakeTransitionScene onContinue={next} />}
           {scene === "cake" && <CakeScene onBlown={next} audioEnabled={false} />}
           {scene === "celebration" && <CelebrationScene onContinue={next} audioEnabled={false} />}
+          {scene === "papaBlessing" && <PapaBlessingScene onContinue={next} />}
           {scene === "wishes" && <WishSequenceScene onContinue={next} />}
           {scene === "yearAhead" && <YearAheadScene onContinue={next} />}
           {scene === "final" && <FinalScene onReplay={handleReplay} />}

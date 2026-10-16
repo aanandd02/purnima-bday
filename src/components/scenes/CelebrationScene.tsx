@@ -288,7 +288,7 @@ export function CelebrationScene({ onContinue }: CelebrationSceneProps) {
                 whileTap={{ scale: 0.96 }}
                 onClick={onContinue}
               >
-                A Special Wish For You ✨
+                A Special Blessing For You 🕊️🤍
               </motion.button>
             </motion.div>
           )}
