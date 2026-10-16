@@ -12,7 +12,7 @@ export const storyConfig = {
   // Relationship milestones (supporting emotional context)
   dates: {
     firstPhoto: "2026-06-06",      // 6 June 2026 — first saw her photo
-    firstTalk: "2026-06-08",       // 8 June 2026 — first conversation
+    firstTalk: "2026-06-08",       // 8 June 2026 — first chat on Instagram
     mannat: "2026-06-09",          // 9 June 2026 — mannat at Bade Hanuman Ji
     firstMeet: "2026-08-09",       // 9 August 2026 — first real meeting
     familyApproval: "2026-10-09",  // 9 October 2026 — families said yes
@@ -44,8 +44,8 @@ export const storyConfig = {
       {
         date: "8 June 2026",
         icon: "💬",
-        label: "The First Hello",
-        description: "Two days later, on 8 June, we spoke for the very first time. That first conversation felt different — warm, natural, and completely unforgettable.",
+        label: "The First Chat",
+        description: "Two days later, on 8 June, we chatted for the very first time — on Instagram. That first conversation felt different — warm, natural, and completely unforgettable.",
       },
       {
         date: "9 June 2026",
@@ -189,7 +189,7 @@ export const storyConfig = {
 
 It all started on 6 June. I saw your photo for the very first time that day — and something about it simply stopped me. I cannot fully explain it, but in that quiet moment, without even knowing you, my heart already felt something different. Something real.
 
-Then came 8 June — when we spoke for the very first time. That first conversation was warm, natural, and completely unforgettable. I remember smiling long after it ended. Something about talking to you felt like finding something I had been quietly missing all along.
+Then came 8 June — when we chatted for the very first time on Instagram. That first conversation was warm, natural, and completely unforgettable. I remember smiling long after it ended. Something about talking to you felt like finding something I had been quietly missing all along.
 
 And on 9 June, I went to Bade Hanuman Ji. I lit a diya, folded my hands, and made a mannat — for you. I asked for you. Even then, before we had truly met, my heart had already decided. That prayer was the most honest thing I had ever asked for.
 
