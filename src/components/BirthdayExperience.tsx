@@ -60,23 +60,23 @@ const PROGRESS_SCENES: Scene[] = SCENE_ORDER.filter(
   (s) => s !== "loading" && s !== "intro"
 );
 
-// Bidirectional smooth transitions
+// Bidirectional smooth transitions (vertical only, prevents horizontal drift)
 const sceneVariants: Variants = {
   initial: (dir: number) => ({
     opacity: 0,
     scale: 0.98,
-    x: dir > 0 ? 12 : -12,
+    y: dir > 0 ? 8 : -8,
   }),
   animate: {
     opacity: 1,
     scale: 1,
-    x: 0,
-    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] as const },
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
   },
   exit: (dir: number) => ({
     opacity: 0,
     scale: 1.01,
-    x: dir > 0 ? -12 : 12,
+    y: dir > 0 ? -8 : 8,
     transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] as const },
   }),
 };
@@ -195,7 +195,7 @@ export default function BirthdayExperience() {
   const showBack = scene !== "loading" && scene !== "intro" && scene !== "final";
 
   return (
-    <div className="phone-frame relative" key={key}>
+    <div className="phone-frame relative overflow-x-hidden" key={key}>
       {/* ── Floating VIP Glass Back Button (Top Left) ── */}
       <AnimatePresence>
         {showBack && (
@@ -274,7 +274,7 @@ export default function BirthdayExperience() {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="w-full relative"
+          className="w-full relative overflow-x-hidden max-w-full"
         >
           {scene === "loading" && <LoadingScene onComplete={handleLoadingComplete} />}
           {scene === "intro" && <IntroScene onBegin={handleBegin} />}

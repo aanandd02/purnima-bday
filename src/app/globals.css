@@ -46,21 +46,31 @@
 
 html {
   min-height: 100%;
+  width: 100%;
+  max-width: 100vw;
   background: var(--bg-deep);
   color: var(--cream);
   font-family: var(--sans);
   -webkit-tap-highlight-color: transparent;
+  overflow-x: clip;
   overflow-x: hidden;
+  overscroll-behavior-x: none;
+  touch-action: pan-y;
 }
 
 body {
   min-height: 100%;
+  width: 100%;
+  max-width: 100vw;
   margin: 0;
   padding: 0;
   background: var(--bg-deep);
   color: var(--cream);
   font-family: var(--sans);
+  overflow-x: clip;
   overflow-x: hidden;
+  overscroll-behavior-x: none;
+  touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -101,18 +111,25 @@ img, video {
   background: var(--bg-warm);
   /* safe area padding so content never hides under notch/home bar */
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  overflow-x: clip;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
 }
 
 /* ── Scene container ────────────────────────────────────── */
 .scene {
   position: relative;
   width: 100%;
+  max-width: 100%;
   min-height: var(--vh-screen);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background: var(--bg-warm);
+  overflow-x: clip;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
 }
 
 /* ── Glass card ─────────────────────────────────────────── */

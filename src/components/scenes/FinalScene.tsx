@@ -37,7 +37,7 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
 
   return (
     <div
-      className="scene relative overflow-y-auto hide-scrollbar"
+      className="scene relative overflow-y-auto overflow-x-hidden hide-scrollbar"
       style={{
         minHeight: "var(--vh-screen)",
         background: "radial-gradient(ellipse at 50% 45%, rgba(65,12,25,0.92) 0%, #060408 100%)",

@@ -129,7 +129,7 @@ export function YearAheadScene({ onContinue }: YearAheadSceneProps) {
 
   return (
     <div
-      className="scene overflow-y-auto hide-scrollbar relative select-none"
+      className="scene overflow-y-auto overflow-x-hidden hide-scrollbar relative select-none"
       style={{
         minHeight: "var(--vh-screen)",
         background: currentTheme.bg,
@@ -190,8 +190,8 @@ export function YearAheadScene({ onContinue }: YearAheadSceneProps) {
           rotate: "-35deg",
         }}
         animate={{
-          x: [-50, 400],
-          y: [-30, 220],
+          x: [-20, 240],
+          y: [-15, 140],
           opacity: [0, 1, 0],
         }}
         transition={{

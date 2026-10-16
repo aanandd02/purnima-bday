@@ -104,7 +104,7 @@ export function CelebrationScene({ onContinue }: CelebrationSceneProps) {
 
   return (
     <div
-      className="scene overflow-y-auto hide-scrollbar relative pb-12"
+      className="scene overflow-y-auto overflow-x-hidden hide-scrollbar relative pb-12"
       style={{
         minHeight: "var(--vh-screen)",
         background: "radial-gradient(ellipse at 50% 40%, #120a14 0%, #09090C 100%)",

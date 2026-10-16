@@ -37,7 +37,7 @@ export function CountdownScene({ onContinue }: CountdownSceneProps) {
 
   return (
     <div
-      className="scene overflow-y-auto hide-scrollbar relative pb-10"
+      className="scene overflow-y-auto overflow-x-hidden hide-scrollbar relative pb-10"
       style={{
         minHeight: "var(--vh-screen)",
         background: "radial-gradient(ellipse at 50% 0%, rgba(90,18,32,0.38) 0%, rgba(90,18,32,0.12) 40%, #09090C 65%)",
