@@ -32,44 +32,44 @@ export const storyConfig = {
 
   // ── Our Story timeline (CountdownScene) ──────────────────
   ourStory: {
-    intro: "Before the surprise unfolds, a little story…",
+    intro: "Before the surprise unfolds, a little story… ❤️",
     heading: "How We Got Here",
     milestones: [
       {
         date: "6 June 2026",
         icon: "📸",
         label: "The First Glimpse",
-        description: "On 6 June, I saw your photo for the very first time. Something about it simply stopped me. I did not know then that this one quiet moment was the beginning of everything.",
+        description: "On 6 June, I saw your photo for the very first time. Something about it simply stopped me. I did not know then that this one quiet moment was the beginning of everything ❤️",
       },
       {
         date: "8 June 2026",
         icon: "💬",
         label: "The First Chat",
-        description: "Two days later, on 8 June, we chatted for the very first time — on Instagram. That first conversation felt different — warm, natural, and completely unforgettable.",
+        description: "Two days later, on 8 June, we chatted for the very first time on Instagram. That first conversation felt so special, warm, natural, and completely unforgettable 🥰",
       },
       {
         date: "9 June 2026",
         icon: "🙏",
         label: "A Prayer at Bade Hanuman Ji",
-        description: "On 9 June, I went to Bade Hanuman Ji and made a mannat — quietly, sincerely — for you. Even before I truly knew you, something in my heart already knew you were the one.",
+        description: "On 9 June, I went to Bade Hanuman Ji and made a mannat quietly and sincerely for you. Even before I truly knew you, my heart already knew you were the one 🙏❤️",
       },
       {
         date: "9 August 2026",
         icon: "🌸",
         label: "The Day I Met You",
-        description: "On 9 August, I finally saw you in person. That moment confirmed everything my heart had already felt.",
+        description: "On 9 August, I finally saw you in person. That moment confirmed everything my heart had already felt 🌸💕",
       },
       {
         date: "9 October 2026",
         icon: "🌹",
         label: "Our Families Said Yes",
-        description: "On 9 October, both our families gave their blessings — to what our hearts had already chosen long before.",
+        description: "On 9 October, both our families gave their blessings to what our hearts had already chosen long before 🌹💍",
       },
       {
         date: "18 October 2026",
         icon: "✨",
-        label: "Today — Your Birthday",
-        description: "And today… a day that is entirely, beautifully all about you. 🎂",
+        label: "Today - Your Birthday 🎂❤️",
+        description: "And today, a day that is entirely and beautifully all about you! Happy Birthday my love 🎂💖✨",
       },
     ],
     ctaLabel: "Continue",
@@ -77,8 +77,8 @@ export const storyConfig = {
 
   // ── Photo reveal ──────────────────────────────────────────
   photoReveal: {
-    line1: "Some moments don't live in albums — they live in the heart.",
-    line2: "These are a few of those moments.",
+    line1: "Some moments don't live in albums, they live right in the heart ❤️",
+    line2: "A few of my favourite moments with you 💕",
   },
 
   // ── Memory gallery ────────────────────────────────────────
@@ -149,59 +149,59 @@ export const storyConfig = {
   // ── Reasons I love you ───────────────────────────────────
   reasons: [
     {
-      title: "Your smile",
-      message: "When you smile — truly, without pretence — it feels like everything is right with the world. There is a quiet peace in that smile that I find nowhere else.",
+      title: "Your Smile ❤️",
+      message: "When you smile, truly and freely, it feels like everything is right with the world. There is a quiet peace in that smile that I find nowhere else 🥰",
     },
     {
-      title: "Your energy",
-      message: "Your presence does something to a room. When you are around or talking, everything feels lighter, warmer, more alive. That's just you.",
+      title: "Your Energy ✨",
+      message: "Your presence does something magical. When you are around or talking, everything feels lighter, warmer, and more alive 💕",
     },
     {
-      title: "Your voice",
-      message: "After a long, noisy day — hearing your voice for even a little while brings a calm that nothing else can. It is my favourite sound.",
+      title: "Your Voice 🎶",
+      message: "After a long day, hearing your voice for even a little while brings a calm that nothing else can. It is my favourite sound in the world ❤️",
     },
     {
-      title: "Your heart",
-      message: "You don't attach easily — it takes time for you to truly let someone in. But when you do, your love is completely genuine, deep, and real. That is what makes you unlike anyone else.",
+      title: "Your Sweet Heart 💖",
+      message: "Your heart is so pure and genuine. When you care for someone, your love is deep and real. That is what makes you so special to me 🤍",
     },
     {
-      title: "Even your stubbornness",
-      message: "Yes, that little sulking and the small tantrums too. Because even in those, your realness shows — completely genuine, with no performance whatsoever.",
+      title: "Even Your Drame & Stubbornness 🙈",
+      message: "Yes, that cute little sulking and the small tantrums too! Because even in those, your innocence and realness shows, completely adorable and completely you 🥰",
     },
     {
-      title: "Your laughter",
-      message: "When you laugh freely, without holding anything back — that is my absolute favourite sound in the world. Seeing you laugh like that makes my heart happy without reason.",
+      title: "Your Laughter 🌸",
+      message: "When you laugh freely from the heart, that is my absolute favourite thing. Seeing you laugh makes my entire day brighter without reason 💖",
     },
     {
-      title: "The little things",
-      message: "That unexpected 'did you eat?' message mid-day, understanding me without words, noticing the smallest details — these are the little things that win hearts completely.",
+      title: "The Little Things 💌",
+      message: "That unexpected 'did you eat?' message, understanding me without words, noticing the smallest details, these little things won my heart completely 💕",
     },
     {
-      title: "You are going to be mine",
-      message: "Just knowing that the entire rest of this life will be spent with you — through every chapter, every turn, always — that feeling alone is enough.",
+      title: "You Are Going To Be Mine 💍",
+      message: "Knowing that the entire rest of this life will be spent with you, through every chapter, every turn, always, that feeling is everything to me ❤️",
     },
   ],
 
   // ── A Letter From My Heart ────────────────────────────────
   letter: {
-    greeting: "My Purnima,",
+    greeting: "My Purnima ❤️,",
     body: `There are some people who come into your life quietly, and without warning, they change everything forever. For me, that person is you.
 
-It all started on 6 June. I saw your photo for the very first time that day — and something about it simply stopped me. I cannot fully explain it, but in that quiet moment, without even knowing you, my heart already felt something different. Something real.
+It all started on 6 June. I saw your photo for the very first time that day, and something about it simply stopped me. In that quiet moment, without even knowing you, my heart felt something real ❤️.
 
-Then came 8 June — when we chatted for the very first time on Instagram. That first conversation was warm, natural, and completely unforgettable. I remember smiling long after it ended. Something about talking to you felt like finding something I had been quietly missing all along.
+Then came 8 June, when we chatted for the very first time on Instagram. That first conversation was so warm, natural, and completely unforgettable. I remember smiling long after it ended. Talking to you felt like finding something I had been missing all along 🥰.
 
-And on 9 June, I went to Bade Hanuman Ji. I lit a diya, folded my hands, and made a mannat — for you. I asked for you. Even then, before we had truly met, my heart had already decided. That prayer was the most honest thing I had ever asked for.
+And on 9 June, I went to Bade Hanuman Ji. I lit a diya, folded my hands, and made a mannat for you. Even before we had truly met, my heart had already decided. That prayer was the most honest wish of my life 🙏❤️.
 
-And then, on 9 August, I finally saw you in person. That moment confirmed everything my heart had already felt. You had this rare, effortless grace — no pretences, no drama, just pure and genuine warmth. I remember thinking: this girl is completely different from anyone I have ever known. And the more I got to know you, the more breathtaking you became to me.
+And then, on 9 August, I finally saw you in person. That moment confirmed everything my heart had already felt. You had this rare, effortless grace, no drama, just pure and genuine warmth. I fell for you even more 🌸💕.
 
-Your smile is my absolute favourite thing — it carries a quiet peace that melts away every worry. But even more than your beauty, it is your heart that completely won me over. The way you genuinely care, the honesty in your eyes, and that soft depth of yours… you do not even realise how extraordinary you truly are.
+Your smile is my absolute favourite thing in this world, it melts away every single worry. But even more than your beauty, it is your sweet and caring heart that won me over completely. The way you care, the honesty in your eyes, you do not even realise how special you truly are ❤️.
 
-And then came 9 October. That unforgettable day when both our families happily said yes to our relationship, blessing what had already grown so deeply in our hearts. In that moment, knowing that you and I are going to share an entire lifetime together, I felt like the most blessed man in the world.
+And then came 9 October. That unforgettable day when both our families happily said yes to our relationship! In that moment, knowing that you and I are going to share an entire lifetime together, I felt like the luckiest person in the world 🌹💍.
 
-Having you by my side is the greatest gift of my life. You are my calm, my happiness, and my forever. I promise to always cherish you, protect your smile, and love you with all my heart through every single chapter of our lives.`,
+Having you by my side is the greatest gift of my life. You are my calm, my happiness, and my forever. I promise to always cherish you, protect your smile, and love you with all my heart through every single chapter of our lives ❤️✨.`,
     closing: "Forever and always yours,",
-    signature: "— The one who prayed for you at Bade Hanuman Ji. 🌹",
+    signature: "The one who prayed for you at Bade Hanuman Ji 🌹❤️",
   },
 
   // ── Cake transition ───────────────────────────────────────

@@ -201,7 +201,7 @@ export function FinalScene({ onReplay }: FinalSceneProps) {
           className="flex items-center gap-3 my-0.5"
         >
           <div className="w-8 h-px" style={{ background: "var(--gold)", opacity: 0.5 }} />
-          <span style={{ color: "var(--gold)", fontSize: 11 }}>✦</span>
+          <span style={{ fontSize: 12 }}>💖</span>
           <div className="w-8 h-px" style={{ background: "var(--gold)", opacity: 0.5 }} />
         </motion.div>
 

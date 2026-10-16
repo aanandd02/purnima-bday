@@ -196,9 +196,9 @@ export function IntroScene({ onBegin }: IntroSceneProps) {
         </motion.div>
 
         {/* Ornamental Divider */}
-        <motion.div variants={itemVariants} className="flex items-center gap-3 my-2 opacity-60">
+        <motion.div variants={itemVariants} className="flex items-center gap-2.5 my-2 opacity-80">
           <div className="w-10 h-px" style={{ background: "var(--gold)" }} />
-          <span style={{ color: "var(--gold)", fontSize: 12 }}>✦</span>
+          <span style={{ fontSize: 13 }}>❤️</span>
           <div className="w-10 h-px" style={{ background: "var(--gold)" }} />
         </motion.div>
 

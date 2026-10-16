@@ -197,7 +197,7 @@ export function CelebrationScene({ onContinue }: CelebrationSceneProps) {
           className="flex items-center gap-2 my-0.5"
         >
           <div className="w-10 h-[1px]" style={{ background: "linear-gradient(90deg, transparent, var(--gold))" }} />
-          <span style={{ color: "var(--gold)", fontSize: 11 }}>✦</span>
+          <span style={{ color: "var(--gold)", fontSize: 11 }}>✨</span>
           <motion.span
             animate={{ scale: [1, 1.25, 1] }}
             transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
@@ -205,7 +205,7 @@ export function CelebrationScene({ onContinue }: CelebrationSceneProps) {
           >
             ♥
           </motion.span>
-          <span style={{ color: "var(--gold)", fontSize: 11 }}>✦</span>
+          <span style={{ color: "var(--gold)", fontSize: 11 }}>✨</span>
           <div className="w-10 h-[1px]" style={{ background: "linear-gradient(90deg, var(--gold), transparent)" }} />
         </motion.div>
 

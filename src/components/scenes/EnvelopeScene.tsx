@@ -158,10 +158,10 @@ export function EnvelopeScene({ onContinue }: EnvelopeSceneProps) {
             {/* Paper Card */}
             <div className="letter-card w-full p-5 sm:p-7 flex flex-col gap-4 relative overflow-hidden">
               {/* Corner flourishes */}
-              <div className="absolute top-3 left-3 text-[9px] text-gold/30">✦</div>
-              <div className="absolute top-3 right-3 text-[9px] text-gold/30">✦</div>
-              <div className="absolute bottom-3 left-3 text-[9px] text-gold/30">✦</div>
-              <div className="absolute bottom-3 right-3 text-[9px] text-gold/30">✦</div>
+              <div className="absolute top-3 left-3 text-[10px] opacity-40">❤️</div>
+              <div className="absolute top-3 right-3 text-[10px] opacity-40">❤️</div>
+              <div className="absolute bottom-3 left-3 text-[10px] opacity-40">❤️</div>
+              <div className="absolute bottom-3 right-3 text-[10px] opacity-40">❤️</div>
 
               {/* Greeting */}
               <p

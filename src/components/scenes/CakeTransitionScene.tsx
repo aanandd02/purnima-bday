@@ -84,12 +84,12 @@ export function CakeTransitionScene({ onContinue }: CakeTransitionSceneProps) {
         {/* Ornamental divider */}
         <motion.div
           variants={itemVariants}
-          className="flex items-center gap-3"
+          className="flex items-center gap-2.5"
           style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
         >
-          <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
-          <span style={{ color: "rgba(212,175,55,0.6)", fontSize: 14 }}>✦</span>
-          <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
+          <div className="w-10 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
+          <span style={{ fontSize: 13 }}>💖</span>
+          <div className="w-10 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
         </motion.div>
 
         {/* Line 1 */}
@@ -144,12 +144,12 @@ export function CakeTransitionScene({ onContinue }: CakeTransitionSceneProps) {
         {/* Ornamental divider bottom */}
         <motion.div
           variants={itemVariants}
-          className="flex items-center gap-3"
+          className="flex items-center gap-2.5"
           style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
         >
-          <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
-          <span style={{ color: "rgba(212,175,55,0.6)", fontSize: 14 }}>✦</span>
-          <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
+          <div className="w-10 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
+          <span style={{ fontSize: 13 }}>💖</span>
+          <div className="w-10 h-px" style={{ background: "rgba(212,175,55,0.45)" }} />
         </motion.div>
       </motion.div>
     </div>
