@@ -196,64 +196,24 @@ export default function BirthdayExperience() {
 
   return (
     <div className="phone-frame relative overflow-x-hidden" key={key}>
-      {/* ── Floating VIP Glass Back Button (Top Left) ── */}
-      <AnimatePresence>
-        {showBack && (
-          <div
-            className="fixed z-50 w-full max-w-[430px] pointer-events-none px-4"
-            style={{
-              left: "50%",
-              transform: "translateX(-50%)",
-              top: "max(14px, env(safe-area-inset-top, 14px))",
-            }}
-          >
-            <motion.button
-              initial={{ opacity: 0, x: -10, scale: 0.92 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: -10, scale: 0.92 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.93 }}
-              onClick={handleBack}
-              className="pointer-events-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full cursor-pointer select-none"
-              style={{
-                background: "rgba(18, 11, 16, 0.65)",
-                border: "1px solid rgba(212, 175, 55, 0.3)",
-                backdropFilter: "blur(14px)",
-                WebkitBackdropFilter: "blur(14px)",
-                boxShadow:
-                  "0 4px 18px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 235, 175, 0.2)",
-              }}
-              aria-label="Previous page"
-            >
-              <span
-                style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: "13px",
-                  color: "var(--gold-light)",
-                  lineHeight: 1,
-                  fontWeight: 700,
-                  marginTop: "-1px",
-                }}
-              >
-                ‹
-              </span>
-              <span
-                style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: "10.5px",
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  fontWeight: 600,
-                  color: "var(--cream)",
-                }}
-              >
-                Back
-              </span>
-            </motion.button>
-          </div>
-        )}
-      </AnimatePresence>
+      {/* Invisible Back Touch Area (Zero visual distraction, full back functionality) */}
+      {showBack && (
+        <div
+          className="fixed z-50 w-full max-w-[430px] pointer-events-none px-4"
+          style={{
+            left: "50%",
+            transform: "translateX(-50%)",
+            top: "max(10px, env(safe-area-inset-top, 10px))",
+          }}
+        >
+          <button
+            onClick={handleBack}
+            className="pointer-events-auto w-16 h-12 opacity-0 cursor-default"
+            aria-label="Previous scene"
+            tabIndex={-1}
+          />
+        </div>
+      )}
 
       {/* Progress */}
       <ProgressIndicator
