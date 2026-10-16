@@ -463,7 +463,7 @@ export function YearAheadScene({ onContinue }: YearAheadSceneProps) {
                     lineHeight: 1.6,
                   }}
                 >
-                  "{stars[activeIndex].wish}"
+                  {stars[activeIndex].wish}
                 </p>
 
                 {/* Action footer inside card */}

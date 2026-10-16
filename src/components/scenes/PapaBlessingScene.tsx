@@ -156,7 +156,7 @@ export function PapaBlessingScene({ onContinue }: PapaBlessingSceneProps) {
             textShadow: "0 2px 14px rgba(0,0,0,0.85)",
           }}
         >
-          &ldquo;{storyConfig.papaBlessing.line1}&rdquo;
+          {storyConfig.papaBlessing.line1}
         </p>
 
         {/* Line 2 */}
@@ -279,7 +279,7 @@ export function PapaBlessingScene({ onContinue }: PapaBlessingSceneProps) {
               lineHeight: 1.6,
             }}
           >
-            &ldquo;{storyConfig.papaBlessing.note}&rdquo;
+            {storyConfig.papaBlessing.note}
           </p>
         </div>
 
