@@ -1,10 +1,9 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
 import { storyConfig } from "@/lib/storyConfig";
 import { haptic } from "@/lib/utils";
-import { audioManager } from "@/lib/audioManager";
 import { asset } from "@/lib/assetPath";
 
 interface CakeSceneProps {
@@ -14,9 +13,81 @@ interface CakeSceneProps {
 
 export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
   const [candlesBlown, setCandlesBlown] = useState(false);
+  const [isBlowing, setIsBlowing] = useState(false);
   const [micAsked, setMicAsked] = useState(false);
   const [listening, setListening] = useState(false);
+  const [isMuted, setIsMuted] = useState(!audioEnabled);
+
+  const burnAudioRef = useRef<HTMLAudioElement | null>(null);
+  const blowAudioRef = useRef<HTMLAudioElement | null>(null);
+  const candlesBlownRef = useRef(false);
+  const isMutedRef = useRef(!audioEnabled);
   const micRef = useRef<MediaStream | null>(null);
+
+  // Sync mute ref
+  useEffect(() => {
+    isMutedRef.current = isMuted;
+    if (burnAudioRef.current) {
+      if (isMuted) {
+        burnAudioRef.current.pause();
+      } else if (!candlesBlownRef.current) {
+        burnAudioRef.current.play().catch(() => {});
+      }
+    }
+  }, [isMuted]);
+
+  // Audio lifecycle: setup continuous burning loop audio & blow sound
+  useEffect(() => {
+    const burnAudio = new Audio(asset("/media/audio/freesound_community-candle-buzz-3-50319.mp3"));
+    burnAudio.loop = true;
+    burnAudio.volume = 0.55;
+    burnAudio.preload = "auto";
+    burnAudioRef.current = burnAudio;
+
+    const blowAudio = new Audio(asset("/media/audio/spinopel-blow-out-the-candle-381892.mp3"));
+    blowAudio.loop = false;
+    blowAudio.volume = 0.85;
+    blowAudio.preload = "auto";
+    blowAudioRef.current = blowAudio;
+
+    // Start playing continuous candle burning sound
+    if (!isMutedRef.current) {
+      const playPromise = burnAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // If browser restricts autoplay before user gesture, play on first touch/click
+          const startOnInteraction = () => {
+            if (burnAudioRef.current && !candlesBlownRef.current && !isMutedRef.current) {
+              burnAudioRef.current.play().catch(() => {});
+            }
+            window.removeEventListener("pointerdown", startOnInteraction);
+            window.removeEventListener("touchstart", startOnInteraction);
+            window.removeEventListener("click", startOnInteraction);
+          };
+          window.addEventListener("pointerdown", startOnInteraction, { once: true });
+          window.addEventListener("touchstart", startOnInteraction, { once: true });
+          window.addEventListener("click", startOnInteraction, { once: true });
+        });
+      }
+    }
+
+    // Cleanup when leaving scene (unmount)
+    return () => {
+      if (burnAudioRef.current) {
+        burnAudioRef.current.pause();
+        burnAudioRef.current.currentTime = 0;
+        burnAudioRef.current = null;
+      }
+      if (blowAudioRef.current) {
+        blowAudioRef.current.pause();
+        blowAudioRef.current.currentTime = 0;
+        blowAudioRef.current = null;
+      }
+      if (micRef.current) {
+        micRef.current.getTracks().forEach((t) => t.stop());
+      }
+    };
+  }, []);
 
   // 3D Parallax Tilt state
   const mouseX = useMotionValue(0);
@@ -52,13 +123,51 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
     return () => window.removeEventListener("deviceorientation", handleOrientation);
   }, [mouseX, mouseY]);
 
-  const blowCandles = () => {
-    if (candlesBlown) return;
-    haptic([25, 45, 25, 45, 25]);
-    if (audioEnabled) audioManager.play("candle", { volume: 0.75 });
+  // Blow out the candles with sound and animation
+  const blowCandles = useCallback(() => {
+    if (candlesBlownRef.current) return;
+    candlesBlownRef.current = true;
     setCandlesBlown(true);
-    setTimeout(onBlown, 2600);
-  };
+    setIsBlowing(true);
+
+    haptic([35, 50, 25, 40, 20]);
+
+    // 1. Stop burning sound smoothly
+    if (burnAudioRef.current) {
+      const burn = burnAudioRef.current;
+      let vol = burn.volume;
+      const fadeInterval = setInterval(() => {
+        vol = Math.max(0, vol - 0.15);
+        burn.volume = vol;
+        if (vol <= 0.05) {
+          clearInterval(fadeInterval);
+          burn.pause();
+          burn.currentTime = 0;
+        }
+      }, 20);
+    }
+
+    // 2. Play blow sound once ("ek hi bar baje")
+    if (blowAudioRef.current && !isMutedRef.current) {
+      blowAudioRef.current.currentTime = 0;
+      blowAudioRef.current.play().catch(() => {});
+    }
+
+    // Gust wind finishes after 700ms
+    setTimeout(() => {
+      setIsBlowing(false);
+    }, 700);
+
+    // Stop microphone if active
+    if (micRef.current) {
+      micRef.current.getTracks().forEach((t) => t.stop());
+      micRef.current = null;
+      setListening(false);
+    }
+
+    // Advance to next celebration scene after full animation moment
+    setTimeout(onBlown, 2800);
+  }, [onBlown]);
 
   // Microphone blow detection
   const startMicDetection = async () => {
@@ -86,8 +195,9 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
           return;
         }
         checks++;
-        if (checks < 400) requestAnimationFrame(check);
-        else {
+        if (checks < 400 && !candlesBlownRef.current) {
+          requestAnimationFrame(check);
+        } else {
           stream.getTracks().forEach((t) => t.stop());
           ctx.close();
           setListening(false);
@@ -106,6 +216,11 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
     }
   };
 
+  const toggleSound = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMuted((prev) => !prev);
+  };
+
   return (
     <div
       className="scene overflow-hidden relative"
@@ -117,24 +232,74 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
         overflow: "hidden",
       }}
     >
-      {/* Warm Ambient Glow from candles - precomputed multi-stop radial gradient without blur filter */}
+      {/* Sound Toggle Button */}
+      <button
+        onClick={toggleSound}
+        aria-label={isMuted ? "Unmute candle sound" : "Mute candle sound"}
+        className="absolute top-4 right-4 z-30 p-2.5 rounded-full glass-card border border-white/10 text-cream/70 hover:text-cream transition-all duration-200 hover:scale-105 active:scale-95"
+        style={{ top: "max(16px, env(safe-area-inset-top, 16px))" }}
+      >
+        <AnimatePresence mode="wait">
+          {!isMuted ? (
+            <motion.svg
+              key="sound-on"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+            </motion.svg>
+          ) : (
+            <motion.svg
+              key="sound-off"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <line x1="23" y1="9" x2="17" y2="15" />
+              <line x1="17" y1="9" x2="23" y2="15" />
+            </motion.svg>
+          )}
+        </AnimatePresence>
+      </button>
+
+      {/* Warm Ambient Glow from candles */}
       <motion.div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         animate={{
-          scale: candlesBlown ? 0.3 : [1, 1.12, 0.98, 1.08, 1],
-          opacity: candlesBlown ? 0 : [0.35, 0.5, 0.4, 0.55, 0.35],
+          scale: candlesBlown ? 0.25 : [1, 1.12, 0.98, 1.08, 1],
+          opacity: candlesBlown ? 0 : [0.35, 0.52, 0.38, 0.55, 0.35],
         }}
         transition={{
-          duration: 2.4,
+          duration: candlesBlown ? 0.9 : 2.4,
           repeat: candlesBlown ? 0 : Infinity,
           ease: "easeInOut",
         }}
         style={{
-          width: 440,
-          height: 440,
+          width: 460,
+          height: 460,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(255,180,60,0.35) 0%, rgba(212,140,40,0.15) 35%, rgba(212,140,40,0.04) 55%, transparent 70%)",
+            "radial-gradient(circle, rgba(255,180,60,0.38) 0%, rgba(212,140,40,0.18) 35%, rgba(212,140,40,0.04) 55%, transparent 70%)",
           transform: "translateZ(0)",
           willChange: "transform, opacity",
         }}
@@ -172,7 +337,7 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
 
         {/* 3D Cake Visual Container with Parallax Tilt */}
         <motion.div
-          className="relative my-4 flex items-center justify-center cursor-pointer"
+          className="relative my-4 flex items-center justify-center cursor-pointer select-none"
           style={{
             rotateX,
             rotateY,
@@ -184,17 +349,19 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
           <div
             className="relative w-[270px] h-[270px] sm:w-[310px] sm:h-[310px] rounded-3xl overflow-hidden"
             style={{
-              boxShadow:
-                "0 25px 60px -15px rgba(0,0,0,0.9), 0 0 30px rgba(212,175,55,0.12), inset 0 1px 0 rgba(255,255,255,0.1)",
+              boxShadow: candlesBlown
+                ? "0 25px 60px -15px rgba(0,0,0,0.95), 0 0 15px rgba(212,175,55,0.05), inset 0 1px 0 rgba(255,255,255,0.05)"
+                : "0 25px 60px -15px rgba(0,0,0,0.9), 0 0 35px rgba(212,175,55,0.18), inset 0 1px 0 rgba(255,255,255,0.1)",
               border: "1px solid rgba(212,175,55,0.25)",
               background: "#0d0c10",
+              transition: "box-shadow 0.9s ease",
             }}
           >
             {/* Lit Cake Image */}
             <motion.div
               className="absolute inset-0"
               animate={{ opacity: candlesBlown ? 0 : 1 }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
+              transition={{ duration: 0.7, ease: "easeInOut" }}
             >
               <Image
                 src={asset("/media/cake/cake-lit.jpg")}
@@ -208,16 +375,18 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
               <motion.div
                 className="absolute inset-0 pointer-events-none mix-blend-screen"
                 animate={{
-                  opacity: [0.2, 0.45, 0.25, 0.5, 0.3],
+                  opacity: isBlowing
+                    ? [0.6, 0.9, 0.2, 0]
+                    : [0.22, 0.48, 0.28, 0.52, 0.3],
                 }}
                 transition={{
-                  duration: 1.8,
-                  repeat: Infinity,
+                  duration: isBlowing ? 0.35 : 1.8,
+                  repeat: isBlowing ? 0 : Infinity,
                   ease: "easeInOut",
                 }}
                 style={{
                   background:
-                    "radial-gradient(circle at 50% 28%, rgba(255,200,90,0.35) 0%, rgba(212,140,40,0.1) 40%, transparent 70%)",
+                    "radial-gradient(circle at 50% 28%, rgba(255,200,90,0.4) 0%, rgba(212,140,40,0.12) 40%, transparent 70%)",
                 }}
               />
             </motion.div>
@@ -227,7 +396,7 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
               className="absolute inset-0"
               initial={{ opacity: 0 }}
               animate={{ opacity: candlesBlown ? 1 : 0 }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
+              transition={{ duration: 0.75, ease: "easeInOut" }}
             >
               <Image
                 src={asset("/media/cake/cake-blown.jpg")}
@@ -237,6 +406,32 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
                 sizes="(max-width: 430px) 310px, 340px"
               />
             </motion.div>
+
+            {/* Breath Gust / Wind Wave Animation Effect */}
+            <AnimatePresence>
+              {isBlowing && (
+                <motion.div
+                  key="blow-gust"
+                  className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 0.75, 0] }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.65, ease: "easeOut" }}
+                >
+                  <motion.div
+                    className="w-full h-24 rounded-full"
+                    initial={{ scaleX: 0.2, scaleY: 0.5, x: -60, opacity: 0 }}
+                    animate={{ scaleX: 1.3, scaleY: 1.1, x: 20, opacity: [0.3, 0.8, 0] }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    style={{
+                      background:
+                        "radial-gradient(ellipse at center, rgba(255,245,220,0.55) 0%, rgba(255,220,150,0.2) 45%, transparent 75%)",
+                      filter: "blur(6px)",
+                    }}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Subtle Vignette & Frame Accent */}
             <div
@@ -270,7 +465,7 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
                 }}
                 animate={{
                   y: [-4, -14, -4],
-                  x: [(i % 2 === 0 ? -3 : 3), (i % 2 === 0 ? 3 : -3), (i % 2 === 0 ? -3 : 3)],
+                  x: [i % 2 === 0 ? -3 : 3, i % 2 === 0 ? 3 : -3, i % 2 === 0 ? -3 : 3],
                   opacity: [0.2, 0.9, 0.2],
                   scale: [0.7, 1.3, 0.7],
                 }}
@@ -283,30 +478,59 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
               />
             ))}
 
-          {/* Wisps of smoke particles rising after blown */}
+          {/* Wisps of smoke & dying ember particles rising after blown */}
           {candlesBlown && (
-            <div className="absolute top-[20%] left-1/2 -translate-x-1/2 pointer-events-none w-32 h-32 flex justify-center">
-              {[0, 1, 2, 3, 4].map((s) => (
+            <div className="absolute top-[16%] left-1/2 -translate-x-1/2 pointer-events-none w-44 h-44 flex justify-center">
+              {/* Glowing dying ember spark */}
+              <motion.div
+                className="absolute top-[28%] rounded-full"
+                initial={{ opacity: 1, scale: 1 }}
+                animate={{ opacity: 0, scale: 0.2 }}
+                transition={{ duration: 1.4, ease: "easeOut" }}
+                style={{
+                  width: 6,
+                  height: 6,
+                  background: "#FF5500",
+                  boxShadow: "0 0 8px #FF7700, 0 0 14px #FF3300",
+                }}
+              />
+
+              {/* Delicate realistic curling smoke wisps */}
+              {[
+                { xInit: -24, xShift: -14, delay: 0.05, dur: 1.9, size: 16 },
+                { xInit: -10, xShift: 8, delay: 0.15, dur: 2.1, size: 20 },
+                { xInit: 0, xShift: -10, delay: 0.08, dur: 2.0, size: 18 },
+                { xInit: 12, xShift: 16, delay: 0.2, dur: 2.2, size: 22 },
+                { xInit: 24, xShift: -8, delay: 0.12, dur: 1.95, size: 16 },
+                { xInit: -4, xShift: 12, delay: 0.32, dur: 2.3, size: 24 },
+                { xInit: 8, xShift: -16, delay: 0.45, dur: 2.1, size: 20 },
+              ].map((s, idx) => (
                 <motion.div
-                  key={s}
+                  key={idx}
                   className="absolute rounded-full"
-                  initial={{ opacity: 0.7, y: 0, scale: 0.4, x: (s - 2) * 12 }}
+                  initial={{
+                    opacity: 0.8,
+                    y: 10,
+                    scale: 0.35,
+                    x: s.xInit,
+                  }}
                   animate={{
-                    opacity: 0,
-                    y: -60 - s * 10,
-                    scale: 2.2,
-                    x: (s - 2) * 20 + (s % 2 === 0 ? 10 : -10),
+                    opacity: [0.8, 0.45, 0],
+                    y: -85 - idx * 12,
+                    scale: [0.35, 1.4, 2.8],
+                    x: [s.xInit, s.xInit + s.xShift, s.xInit + s.xShift * 1.5],
                   }}
                   transition={{
-                    duration: 1.6,
-                    delay: s * 0.12,
+                    duration: s.dur,
+                    delay: s.delay,
                     ease: "easeOut",
                   }}
                   style={{
-                    width: 14,
-                    height: 14,
-                    background: "radial-gradient(circle, rgba(220,220,220,0.45) 0%, transparent 70%)",
-                    filter: "blur(3px)",
+                    width: s.size,
+                    height: s.size,
+                    background:
+                      "radial-gradient(circle, rgba(230,230,235,0.48) 0%, rgba(200,200,210,0.18) 50%, transparent 75%)",
+                    filter: "blur(4px)",
                   }}
                 />
               ))}
@@ -338,14 +562,14 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
               </p>
 
               <motion.button
-                className="btn-cinematic"
+                className="btn-cinematic flex items-center justify-center gap-2"
                 whileTap={{ scale: 0.95 }}
                 onClick={() => {
                   handleMicOrTap();
                   blowCandles();
                 }}
               >
-                {listening ? "Blow now… 🎤" : "Tap to blow the candles ✨"}
+                <span>{listening ? "Blow now… 🎤" : "Tap to blow the candles ✨"}</span>
               </motion.button>
 
               {listening && (
@@ -389,3 +613,4 @@ export function CakeScene({ onBlown, audioEnabled = true }: CakeSceneProps) {
     </div>
   );
 }
+

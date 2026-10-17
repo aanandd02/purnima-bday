@@ -226,73 +226,203 @@ export function CelebrationScene({ onContinue }: CelebrationSceneProps) {
           To the girl who brings all the light into my world. Happy Birthday, my love.
         </motion.p>
 
-        {/* Birthday Wish Video Presentation (Auto-revealed and played) */}
-        <AnimatePresence>
-          {showVideo && (
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-xs flex flex-col items-center gap-3 my-2"
-            >
-              {/* Video Container */}
-              <div
-                className="relative w-full rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center"
-                style={{
-                  border: "1.5px solid rgba(212, 175, 55, 0.65)",
-                  boxShadow: "0 12px 35px rgba(0,0,0,0.8), 0 0 25px rgba(212,175,55,0.25)",
-                  background: "#000",
-                  maxHeight: "44vh",
-                  aspectRatio: "9/14",
-                }}
+        {/* Birthday Wish Video Presentation (Sweet Romantic Cinematic Reveal) */}
+        <div className="w-full max-w-xs flex flex-col items-center min-h-[340px] justify-center my-2">
+          <AnimatePresence mode="wait">
+            {!showVideo ? (
+              <motion.div
+                key="surprise-teaser"
+                initial={{ opacity: 0, scale: 0.88 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9, filter: "blur(8px)" }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-col items-center justify-center gap-3 py-10"
               >
-                <video
-                  ref={videoRef}
-                  src={asset(storyConfig.birthdayWishVideo.src)}
-                  poster={asset(storyConfig.birthdayWishVideo.poster)}
-                  controls
-                  autoPlay
-                  playsInline
-                  preload="auto"
-                  controlsList="nodownload"
-                  className="w-full h-full object-contain"
-                />
-
-                {/* Resilient Unmute Banner if audio was muted by browser autoplay policy */}
-                {isMuted && (
-                  <button
-                    onClick={unmuteVideo}
-                    className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-sans font-medium flex items-center gap-1.5 cursor-pointer z-20"
+                <div className="relative flex items-center justify-center">
+                  {/* Glowing pulse rings */}
+                  <motion.div
+                    className="absolute rounded-full pointer-events-none"
+                    animate={{ scale: [1, 1.45, 1], opacity: [0.4, 0, 0.4] }}
+                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
                     style={{
-                      background: "rgba(22, 17, 24, 0.85)",
-                      border: "1px solid rgba(212, 175, 55, 0.7)",
-                      color: "var(--gold-light)",
-                      backdropFilter: "blur(10px)",
-                      boxShadow: "0 4px 15px rgba(0,0,0,0.6)",
+                      width: 76,
+                      height: 76,
+                      border: "1px solid rgba(212, 175, 55, 0.5)",
+                    }}
+                  />
+                  <motion.div
+                    className="w-16 h-16 rounded-full flex items-center justify-center relative cursor-default"
+                    animate={{ scale: [1, 1.08, 1], rotate: [0, -2, 2, 0] }}
+                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                    style={{
+                      background:
+                        "radial-gradient(circle, rgba(212,175,55,0.22) 0%, rgba(255,107,139,0.14) 60%, rgba(10,8,12,0.9) 100%)",
+                      border: "1.5px solid rgba(212, 175, 55, 0.55)",
+                      boxShadow: "0 0 25px rgba(212,175,55,0.3), inset 0 0 15px rgba(255,107,139,0.15)",
                     }}
                   >
-                    <span>🔊</span>
-                    <span>Tap for Sound</span>
-                  </button>
-                )}
-              </div>
-
-              {/* Romantic Caption */}
-              <p className="text-[12px] font-serif italic text-cream/80 max-w-[270px] text-center leading-relaxed">
-                {storyConfig.birthdayWishVideo.caption}
-              </p>
-
-              {/* Continue button */}
-              <motion.button
-                className="btn-cinematic w-full mt-1"
-                whileTap={{ scale: 0.96 }}
-                onClick={onContinue}
+                    <span className="text-2xl select-none">💝</span>
+                  </motion.div>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <p
+                    className="text-gold/90 text-[10px] tracking-[0.28em] uppercase font-medium"
+                    style={{ fontFamily: "var(--sans)" }}
+                  >
+                    A special gift for you ✨
+                  </p>
+                  <p className="text-cream/50 text-[11px] font-serif italic">
+                    Unwrapping your birthday wish...
+                  </p>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="video-reveal"
+                initial={{ opacity: 0, y: 28, scale: 0.84, filter: "blur(14px)" }}
+                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full flex flex-col items-center gap-3 relative"
               >
-                A Special Blessing For You 🕊️🤍
-              </motion.button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                {/* Radiant Warm Backlight Halo behind the video */}
+                <motion.div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none -z-10"
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{
+                    scale: [1, 1.12, 1],
+                    opacity: [0.45, 0.65, 0.45],
+                  }}
+                  transition={{
+                    scale: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
+                    opacity: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
+                    default: { duration: 1.2, ease: "easeOut" },
+                  }}
+                  style={{
+                    width: 340,
+                    height: 380,
+                    borderRadius: "50%",
+                    background:
+                      "radial-gradient(circle, rgba(212,175,55,0.32) 0%, rgba(255,107,139,0.16) 45%, transparent 75%)",
+                    transform: "translateZ(0)",
+                    filter: "blur(12px)",
+                  }}
+                />
+
+                {/* Floating fairy sparkles around the video card */}
+                {[
+                  { top: "-6px", left: "10%", delay: 0.2, symbol: "✨", size: 14 },
+                  { top: "30%", right: "-12px", delay: 0.4, symbol: "💖", size: 12 },
+                  { bottom: "25%", left: "-10px", delay: 0.6, symbol: "✨", size: 13 },
+                  { bottom: "-6px", right: "12%", delay: 0.5, symbol: "🌸", size: 12 },
+                ].map((sparkle, idx) => (
+                  <motion.div
+                    key={idx}
+                    className="absolute pointer-events-none z-20 select-none"
+                    style={{
+                      top: sparkle.top,
+                      left: sparkle.left,
+                      right: sparkle.right,
+                      bottom: sparkle.bottom,
+                      fontSize: sparkle.size,
+                    }}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{
+                      opacity: [0, 0.9, 0.3, 0.9],
+                      scale: [0.5, 1.2, 0.9, 1.1],
+                      y: [-2, -8, -2],
+                    }}
+                    transition={{
+                      opacity: { delay: sparkle.delay, duration: 2.4, repeat: Infinity, ease: "easeInOut" },
+                      scale: { delay: sparkle.delay, duration: 2.4, repeat: Infinity, ease: "easeInOut" },
+                      y: { delay: sparkle.delay, duration: 2.8, repeat: Infinity, ease: "easeInOut" },
+                    }}
+                  >
+                    {sparkle.symbol}
+                  </motion.div>
+                ))}
+
+                {/* Video Container with Elegant Frame & Shimmer Sweep */}
+                <div
+                  className="relative w-full rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center group"
+                  style={{
+                    border: "1.5px solid rgba(212, 175, 55, 0.75)",
+                    boxShadow:
+                      "0 18px 45px rgba(0,0,0,0.85), 0 0 35px rgba(212,175,55,0.28), inset 0 1px 0 rgba(255,255,255,0.15)",
+                    background: "#050406",
+                    maxHeight: "44vh",
+                    aspectRatio: "9/14",
+                  }}
+                >
+                  <video
+                    ref={videoRef}
+                    src={asset(storyConfig.birthdayWishVideo.src)}
+                    poster={asset(storyConfig.birthdayWishVideo.poster)}
+                    controls
+                    autoPlay
+                    playsInline
+                    preload="auto"
+                    controlsList="nodownload"
+                    className="w-full h-full object-contain"
+                  />
+
+                  {/* Luminous Diagonal Light Sheen Sweep on Reveal */}
+                  <motion.div
+                    className="absolute inset-0 pointer-events-none z-10"
+                    initial={{ x: "-110%", opacity: 0.85 }}
+                    animate={{ x: "210%", opacity: 0 }}
+                    transition={{ delay: 0.25, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                    style={{
+                      background:
+                        "linear-gradient(108deg, transparent 20%, rgba(255, 235, 180, 0.4) 48%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 235, 180, 0.4) 52%, transparent 80%)",
+                      filter: "blur(2px)",
+                    }}
+                  />
+
+                  {/* Resilient Unmute Banner if audio was muted by browser autoplay policy */}
+                  {isMuted && (
+                    <button
+                      onClick={unmuteVideo}
+                      className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-sans font-medium flex items-center gap-1.5 cursor-pointer z-20 hover:scale-105 active:scale-95 transition-transform"
+                      style={{
+                        background: "rgba(22, 17, 24, 0.88)",
+                        border: "1px solid rgba(212, 175, 55, 0.75)",
+                        color: "var(--gold-light)",
+                        backdropFilter: "blur(12px)",
+                        boxShadow: "0 4px 18px rgba(0,0,0,0.65)",
+                      }}
+                    >
+                      <span>🔊</span>
+                      <span>Tap for Sound</span>
+                    </button>
+                  )}
+                </div>
+
+                {/* Romantic Caption with Staggered Entrance */}
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-[12px] font-serif italic text-cream/85 max-w-[270px] text-center leading-relaxed"
+                  style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
+                >
+                  {storyConfig.birthdayWishVideo.caption}
+                </motion.p>
+
+                {/* Continue button with Staggered Entrance */}
+                <motion.button
+                  initial={{ opacity: 0, y: 14, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ delay: 0.65, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="btn-cinematic w-full mt-1"
+                  whileTap={{ scale: 0.96 }}
+                  onClick={onContinue}
+                >
+                  A Special Blessing For You 🕊️🤍
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

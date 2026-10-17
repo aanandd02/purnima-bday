@@ -248,7 +248,7 @@ export default function BirthdayExperience() {
           {scene === "reasons" && <ReasonsScene onContinue={next} />}
           {scene === "envelope" && <EnvelopeScene onContinue={next} />}
           {scene === "cakeTransition" && <CakeTransitionScene onContinue={next} />}
-          {scene === "cake" && <CakeScene onBlown={next} audioEnabled={false} />}
+          {scene === "cake" && <CakeScene onBlown={next} audioEnabled={true} />}
           {scene === "celebration" && <CelebrationScene onContinue={next} audioEnabled={false} />}
           {scene === "papaBlessing" && <PapaBlessingScene onContinue={next} />}
           {scene === "wishes" && <WishSequenceScene onContinue={next} />}

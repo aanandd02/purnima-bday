@@ -378,8 +378,11 @@ export const birthdayConfig = {
   easterEggs: storyConfig.easterEggs,
   audio: {
     background: "",
-    candle: "",
+    candle: "/media/audio/spinopel-blow-out-the-candle-381892.mp3",
+    candleBurn: "/media/audio/freesound_community-candle-buzz-3-50319.mp3",
+    candleBlow: "/media/audio/spinopel-blow-out-the-candle-381892.mp3",
     celebration: "",
     fireworks: "",
   },
 } as const;
+
